@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Christmas Profile
-// @version      0.1
+// @version      1.0
 // @description  Client Side Christmas Themed Profile
 // @author       You
 // @match        *.steamcommunity.com/id/*
@@ -32,6 +32,5 @@
     StartAnimation();
   });
 
-  //Manually add the Holiday Profile Overlay thingy with the crystals.
-  $J(".profile_header_bg_texture").append('<div class="holidayprofile_header_overlay"></div>')
 })();
+
