@@ -1,5 +1,16 @@
+// ==UserScript==
+// @name         Christmas Profile - Non-Steam Version
+// @version      1.0
+// @description  Client Side Christmas Themed Profile
+// @author       You
+// @match        *.steamcommunity.com/id/*
+// @match        *.steamcommunity.com/profile/*
+// @grant        none
+// ==/UserScript==
+
 /*
  * Manual Version
+ * After the christmas profiles expire, this should still work if they remove files
  */
 (function() {
   // Manually add minfied CSS using <stlye>
