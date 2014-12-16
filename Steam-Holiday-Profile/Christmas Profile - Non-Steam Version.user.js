@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Christmas Profile - Non-Steam Version
-// @version      1.0
+// @version      1.1
 // @description  Client Side Christmas Themed Profile
 // @author       You
 // @match        *.steamcommunity.com/id/*

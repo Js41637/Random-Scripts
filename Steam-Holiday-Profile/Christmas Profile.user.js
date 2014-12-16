@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Christmas Profile
-// @version      1.0
+// @version      1.1
 // @description  Client Side Christmas Themed Profile
 // @author       You
 // @match        *.steamcommunity.com/id/*
@@ -17,14 +17,16 @@
 (function() {
   // Add Holiday CSS.
   $J("head").append(
-      $J(document.createElement("link")).prop({
-          href: "http://steamcommunity-a.akamaihd.net/public/css/skin_1/holidayprofile.css?v=" + new Date().valueOf(),
-          rel: "stylesheet",
-          type: "text/css"
-      })
+    $J(document.createElement("link")).prop({
+      href: "http://steamcommunity-a.akamaihd.net/public/css/skin_1/holidayprofile.css?v=" + new Date().valueOf(),
+      rel: "stylesheet",
+      type: "text/css"
+    })
   );
   // Activate the CSS.
   $J(".profile_page").addClass("holidayprofile");
+  //Manually add the Holiday Profile Overlay thingy with the crystals.
+  $J(".profile_header_bg_texture").append('<div class="holidayprofile_header_overlay"></div>')
 
   // Get the Javascript
   $J.getScript("http://steamcommunity-a.akamaihd.net/public/javascript/holidayprofile.js").done(function() {
