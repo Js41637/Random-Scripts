@@ -15,10 +15,6 @@
  * Steam hosted version
  */
 (function() {
-  /*
-   * Get the core Holiday Profile Javascript and CSS
-   */
-    
   // Add Holiday CSS.
   $J("head").append(
       $J(document.createElement("link")).prop({
@@ -38,5 +34,4 @@
 
   //Manually add the Holiday Profile Overlay thingy with the crystals.
   $J(".profile_header_bg_texture").append('<div class="holidayprofile_header_overlay"></div>')
-
 })();
