@@ -31,11 +31,11 @@
   // If the user is online, swap out the 'online' class for the 'golden' class
   // Only swap to the golden class when the user is 'online' and not 'offline' or 'in-game'
   // Manually adds and removes required classes, switchClass function doesn't seem to work or be supported
-  if(iAvatar.hasClass("online") {
+  if(iAvatar.hasClass("online")) {
     iAvatar.addClass("golden");
     iAvatar.removeClass("online");
   }
-  if(iOnlineStatus.hasClass("online") {
+  if(iOnlineStatus.hasClass("online")) {
     iOnlineStatus.addClass("golden");
     iOnlineStatus.removeClass("online");
   }
