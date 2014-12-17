@@ -3,8 +3,7 @@
 // @version      1.2
 // @description  Client Side Christmas Themed Profile
 // @author       Js41637
-// @match        *.steamcommunity.com/id/*
-// @match        *.steamcommunity.com/profile/*
+// @include        /^https?://steamcommunity.com/(id|profile)/*
 // @grant        none
 // ==/UserScript==
 
