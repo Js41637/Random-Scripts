@@ -4,6 +4,7 @@
 // @description  Client Side Christmas Themed Profile
 // @author       Js41637
 // @include      /^https?://steamcommunity.com/(id|profile)/
+// @downloadURL https://github.com/Js41637/Userscripts/raw/master/Steam-Holiday-Profile/Christmas%20Profile.user.js
 // @grant        none
 // ==/UserScript==
 
