@@ -3,7 +3,7 @@
 // @version      1.2
 // @description  Client Side Christmas Themed Profile
 // @author       Js41637
-// @include        /^https?://steamcommunity.com/(id|profile)/*
+// @include      /^https?://steamcommunity.com/(id|profile)/
 // @grant        none
 // ==/UserScript==
 
@@ -22,7 +22,7 @@
   // Add the Holiday Themed CSS
   $J("head").append(
     $J(document.createElement("link")).prop({
-      href: "http://steamcommunity-a.akamaihd.net/public/css/skin_1/holidayprofile.css?v=" + new Date().valueOf(),
+      href: "https://steamcommunity-a.akamaihd.net/public/css/skin_1/holidayprofile.css?v=" + new Date().valueOf(),
       rel: "stylesheet",
       type: "text/css"
     })
@@ -47,7 +47,7 @@
   $J(".profile_header_bg_texture").append('<div class="holidayprofile_header_overlay"></div>');
 
   // Get the Javascript
-  $J.getScript("http://steamcommunity-a.akamaihd.net/public/javascript/holidayprofile.js").done(function() {
+  $J.getScript("https://steamcommunity-a.akamaihd.net/public/javascript/holidayprofile.js").done(function() {
     // Oddly the JS doesn't start itself
     StartAnimation();
   });
