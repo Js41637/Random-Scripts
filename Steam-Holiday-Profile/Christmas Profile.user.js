@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Christmas Profile
-// @version      1.1
+// @version      1.2
 // @description  Client Side Christmas Themed Profile
-// @author       You
+// @author       Js41637
 // @match        *.steamcommunity.com/id/*
 // @match        *.steamcommunity.com/profile/*
 // @grant        none
@@ -13,9 +13,14 @@
 
 /*
  * Steam hosted version
+ * Depends on Steam Hosting the required files
  */
 (function() {
-  // Add Holiday CSS.
+  /*
+   * CSS Stylesheet and Classes
+   */
+
+  // Add the Holiday Themed CSS
   $J("head").append(
     $J(document.createElement("link")).prop({
       href: "http://steamcommunity-a.akamaihd.net/public/css/skin_1/holidayprofile.css?v=" + new Date().valueOf(),
@@ -23,10 +28,24 @@
       type: "text/css"
     })
   );
-  // Activate the CSS.
+  // Activate the CSS on the page
   $J(".profile_page").addClass("holidayprofile");
-  //Manually add the Holiday Profile Overlay thingy with the crystals.
-  $J(".profile_header_bg_texture").append('<div class="holidayprofile_header_overlay"></div>')
+  // Avatar Outline (must be manually set) ONLY when user is 'online', not in-game or offline
+  if($J(".playerAvatar.profile_header_size").hasClass("online")) {
+    // Swap out the online class for the golden class
+    // switchClass doesn't seem to work or be supported ?
+    $J(".playerAvatar.profile_header_size").addClass("golden");
+    $J(".playerAvatar.profile_header_size").removeClass("online");
+  }
+  // Online Status (must be manually set) ONLY when user is 'online', not in-game or offline
+  if($J(".profile_in_game.persona").hasClass("online")) {
+    // Swap out the online class for the golden class
+    // switchClass doesn't seem to work or be supported ?
+    $J(".profile_in_game.persona").addClass("golden");
+    $J(".profile_in_game.persona").removeClass("online");
+  }
+  // Manually add the Holiday Profile Overlay thingy with the crystals.
+  $J(".profile_header_bg_texture").append('<div class="holidayprofile_header_overlay"></div>');
 
   // Get the Javascript
   $J.getScript("http://steamcommunity-a.akamaihd.net/public/javascript/holidayprofile.js").done(function() {
