@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Christmas Profile - Non-Steam Version
-// @version      1.3
+// @version      1.3.1
 // @description  Client Side Christmas Themed Profile
 // @author       Js41637
 // @include      /^https?://steamcommunity.com/(id|profile)/
