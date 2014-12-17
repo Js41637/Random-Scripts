@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Christmas Profile - Non-Steam Version
-// @version      1.2
+// @version      1.3
 // @description  Client Side Christmas Themed Profile
 // @author       Js41637
 // @include      /^https?://steamcommunity.com/(id|profile)/
@@ -23,20 +23,22 @@
   $J("head").append("<style>.holidayprofile .profile_header_bg{background:url(http://i.imgur.com/f9X1kgd.png) center top no-repeat;height:280px;z-index:2;max-width:1057px}.holidayprofile .profile_header_bg_texture{background:0 0}.holidayprofile_header_overlay{position:absolute;z-index:2;top:0;right:0;bottom:0;left:0;background:url('http://i.imgur.com/mCRlCEj.png') center top no-repeat;pointer-events:none}.holidayprofile .profile_header_content .btn_profile_action,.holidayprofile .profile_header_content .persona_name,.holidayprofile .profile_header_content .whiteLink{z-index:2;position:relative}.holidayprofile .profile_header_content .favorite_badge>div{z-index:2}.holidayprofile .profile_header_content .persona_name{z-index:3}.holidayprofile .profile_header_content .actual_persona_name{color:#e4ca63}.holidayprofile .profile_content{margin-top:-48px;padding-top:6px;overflow:visible}.holidayprofile .profile_rightcol{padding-top:52px}.holidayprofile .profile_customization:not(.none_selected){background:url('http://i.imgur.com/mt4EhuY.png') center -6px repeat-y;overflow:visible;margin-top:50px;margin-bottom:100px}.holidayprofile .profile_customization:not(.none_selected)::before{content:'';background:url('http://i.imgur.com/R04mrdr.png') center top no-repeat;width:664px;height:85px;position:absolute;z-index:0;left:-15px;top:-10px;display:block}.holidayprofile .profile_customization:not(.none_selected)::after{content:'';background:url('http://i.imgur.com/50sctcI.png') center bottom no-repeat;width:664px;height:85px;position:absolute;left:-15px;display:block}.holidayprofile .profile_customization:not(.none_selected) .profile_customization_header{position:relative;text-shadow:1px 1px 2px #000;margin-bottom:40px;color:#e4ca63}.holidayprofile_animation{position:absolute;background-repeat:no-repeat;z-index:10}</style>");
   // Activate the CSS on the page
   $J(".profile_page").addClass("holidayprofile");
-  // Avatar Outline (must be manually set) ONLY when user is 'online', not in-game or offline
-  if($J(".playerAvatar.profile_header_size").hasClass("online")) {
-    // Swap out the online class for the golden class
-    // switchClass doesn't seem to work or be supported ?
-    $J(".playerAvatar.profile_header_size").addClass("golden");
-    $J(".playerAvatar.profile_header_size").removeClass("online");
+
+  // Find Avatar and Online Status elements
+  var iAvatar = $J(".playerAvatar.profile_header_size");
+  var iOnlineStatus = $J(".profile_in_game.persona");
+  // If the user is online, swap out the 'online' class for the 'golden' class
+  // Only swap to the golden class when the user is 'online' and not 'offline' or 'in-game'
+  // Manually adds and removes required classes, switchClass function doesn't seem to work or be supported
+  if(iAvatar.hasClass("online") {
+    iAvatar.addClass("golden");
+    iAvatar.removeClass("online");
   }
-  // Online Status (must be manually set) ONLY when user is 'online', not in-game or offline
-  if($J(".profile_in_game.persona").hasClass("online")) {
-    // Swap out the online class for the golden class
-    // switchClass doesn't seem to work or be supported ?
-    $J(".profile_in_game.persona").addClass("golden");
-    $J(".profile_in_game.persona").removeClass("online");
+  if(iOnlineStatus.hasClass("online") {
+    iOnlineStatus.addClass("golden");
+    iOnlineStatus.removeClass("online");
   }
+
   // Manually add the Holiday Profile Overlay thingy with the crystals.
   $J(".profile_header_bg_texture").append('<div class="holidayprofile_header_overlay"></div>');
 

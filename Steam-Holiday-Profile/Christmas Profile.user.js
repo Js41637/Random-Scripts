@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Christmas Profile
-// @version      1.2
+// @version      1.3
 // @description  Client Side Christmas Themed Profile
 // @author       Js41637
 // @include      /^https?://steamcommunity.com/(id|profile)/
@@ -29,22 +29,28 @@
   );
   // Activate the CSS on the page
   $J(".profile_page").addClass("holidayprofile");
-  // Avatar Outline (must be manually set) ONLY when user is 'online', not in-game or offline
-  if($J(".playerAvatar.profile_header_size").hasClass("online")) {
-    // Swap out the online class for the golden class
-    // switchClass doesn't seem to work or be supported ?
-    $J(".playerAvatar.profile_header_size").addClass("golden");
-    $J(".playerAvatar.profile_header_size").removeClass("online");
+
+  // Find Avatar and Online Status elements
+  var iAvatar = $J(".playerAvatar.profile_header_size");
+  var iOnlineStatus = $J(".profile_in_game.persona");
+  // If the user is online, swap out the 'online' class for the 'golden' class
+  // Only swap to the golden class when the user is 'online' and not 'offline' or 'in-game'
+  // Manually adds and removes required classes, switchClass function doesn't seem to work or be supported
+  if(iAvatar.hasClass("online") {
+    iAvatar.addClass("golden");
+    iAvatar.removeClass("online");
   }
-  // Online Status (must be manually set) ONLY when user is 'online', not in-game or offline
-  if($J(".profile_in_game.persona").hasClass("online")) {
-    // Swap out the online class for the golden class
-    // switchClass doesn't seem to work or be supported ?
-    $J(".profile_in_game.persona").addClass("golden");
-    $J(".profile_in_game.persona").removeClass("online");
+  if(iOnlineStatus.hasClass("online") {
+    iOnlineStatus.addClass("golden");
+    iOnlineStatus.removeClass("online");
   }
+
   // Manually add the Holiday Profile Overlay thingy with the crystals.
   $J(".profile_header_bg_texture").append('<div class="holidayprofile_header_overlay"></div>');
+
+  /*
+   * Javascript for image animations
+   */
 
   // Get the Javascript
   $J.getScript("https://steamcommunity-a.akamaihd.net/public/javascript/holidayprofile.js").done(function() {
