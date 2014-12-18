@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         Hide Empty Showcase
-// @version      0.1
+// @version      0.3
 // @description  Hides the empty showcase
 // @author       Js41637
-// @include        *://steamcommunity.com/id/*
-// @include        *://steamcommunity.com/profiles/*
+// @include      /^https?://steamcommunity.com/(id|profile)/
 // @grant        none
 // ==/UserScript==
 
-var hidethingy = document.querySelectorAll('.profile_customization.customization_edit.none_selected');
-hidethingy[0].style.display = 'none';
+//Find and hide the empty showcase field button thing
+$J('.profile_customization.customization_edit.none_selected').remove();
+
+console.info("Add New Showcase field removed");
