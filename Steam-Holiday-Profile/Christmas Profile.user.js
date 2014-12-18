@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Christmas Profile
-// @version      1.3.1
+// @version      1.3.2
 // @description  Client Side Christmas Themed Profile
 // @author       Js41637
 // @include      /^https?://steamcommunity.com/(id|profile)/
@@ -16,6 +16,9 @@
  * Depends on Steam Hosting the required files
  */
 (function() {
+
+  console.info("Holiday Profile 2014 loading");
+
   /*
    * CSS Stylesheet and Classes
    */
