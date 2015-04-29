@@ -8,13 +8,13 @@
 // ==/UserScript==
 
 // Select area
-var content = document.getElementById("home_main_cluster");
+var container = document.getElementById("home_main_cluster");
 
-//Delete inner content
-content.innerHTML = ''
+// Delete inner content
+container.innerHTML = '';
 
 //set height of element
-content.setStyle({height: '399px'});
+container.style.height = "399px";
 
 //Insert video
-content.innerHTML = '<iframe width="100%" height="399px" src="https://youtube.com/embed/HgV1O0X4uXI?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>'
+container.innerHTML = '<iframe width="100%" height="399px" src="https://youtube.com/embed/HgV1O0X4uXI?rel=0&autoplay=1" frameborder="0" allowfullscreen></iframe>';
