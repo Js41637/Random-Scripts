@@ -160,8 +160,10 @@ function goToLaneWithBestTarget() {
 					}
 				}
 				console.info("Found Creep", lowestHealthEnemy);
-				targetLane = lowestHealthEnemy.m_nLane;
-				targetEnemy = lowestHealthEnemy.m_nID;
+				if (lowestHealthEnemy !== null) {
+					targetLane = lowestHealthEnemy.m_nLane;
+					targetEnemy = lowestHealthEnemy.m_nID;
+				}
 			}
 		}
 		targetFound = true;
