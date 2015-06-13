@@ -62,6 +62,8 @@ function doTheThing() {
 		return;
 	}
 	isAlreadyRunning = true;
+
+	g_msTickRate = 1100;
 	
 	goToLaneWithBestTarget();
 	useMedicsIfRelevant();
@@ -77,7 +79,7 @@ function CheckRainGold() {
 		for (var iLane = 0; iLane < g_Minigame.CurrentScene().m_rgGameData.lanes.length; iLane++) {
 			var stacks = 0;
 			// Check if Rain Gold Stack is active
-			if (g_Minigame.m_CurrentScene.m_rgLaneData[iLane].abilities[17] !== 'undefined' && g_Minigame.CurrentScene().m_rgGameData.lanes[iLane].dps !== 0) {
+			if (g_Minigame.m_CurrentScene.m_rgLaneData[iLane].abilities[17] !== undefined && g_Minigame.CurrentScene().m_rgGameData.lanes[iLane].dps !== 0) {
 				stacks = g_Minigame.m_CurrentScene.m_rgLaneData[iLane].abilities[17];
 				console.info("Found lane with Raining Gold", iLane, stacks);
 				// Find enemy with highest gold * stacks value and set it as preferred target
@@ -252,6 +254,14 @@ function start() {
 	}
 	var thingTimer = window.setInterval(doTheThing, 1500);
 	var clickTimer = window.setInterval(clickTheThing, 1000/clickRate);
+
+	setTimeout(function() {
+		g_Minigame.CurrentScene().SpawnEmitter = function(emitter) {
+			emitter.emit = false;
+			return emitter;
+		};
+	}, 1000);
+	
 }
 
 function clickTheThing() {
