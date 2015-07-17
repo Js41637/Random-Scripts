@@ -25,7 +25,7 @@ var initialize = function() {
     $J = jQuery;
 
     // Minified CSS to add into the page
-    $J("<style type='text/css'>#toggle-sidepanel{position:fixed;right:213px;transform:rotate(90deg);top:37px;background-color:rgba(0,0,0,.6);padding:10px;z-index:5000;font-size:15px;text-transform:uppercase;transition:background-color,right .2s ease-in-out;cursor:pointer}#toggle-sidepanel:hover{background-color:rgba(60,60,60,.5)}#comcenter-friends{transition:width .2s ease-in-out}#base-header{transition:right .2s ease-in-out}#viewport{transition:padding .2s ease-in-out}.hidesidepanel #comcenter-friends{width:0!important}.hidesidepanel #base-header{right:0!important}.hidesidepanel #viewport{padding-right:0!important}.hidesidepanel #toggle-sidepanel{right:-24px !important}#base-container:before{height:64px;}.game-bar .battlelog-logo{position:absolute;top:0px;left:30px;z-index:1000}.game-bar .battlelog-logo .logo{display:block;width:70px;height:48px;background:url(//d34ymitoc1pg7m.cloudfront.net/common/battlelog-logo-082bd9ee.png) 0 50% no-repeat;background-size:contain;}</style>").appendTo("head");
+    $J("<style type='text/css'>#toggle-sidepanel{position:fixed;right:213px;transform:rotate(90deg);top:37px;background-color:rgba(0,0,0,.6);padding:10px;z-index:5000;font-size:15px;text-transform:uppercase;transition:background-color,right .2s ease-in-out;cursor:pointer}#toggle-sidepanel:hover{background-color:rgba(60,60,60,.5)}#comcenter-friends{transition:width .2s ease-in-out}#base-header,#unified-game-manager{transition:right .2s ease-in-out}#viewport{transition:padding .2s ease-in-out}.hidesidepanel #comcenter-friends{width:0!important}.hidesidepanel #base-header,.hidesidepanel #unified-game-manager{right:0!important}.hidesidepanel #viewport{padding-right:0!important}.hidesidepanel #toggle-sidepanel{right:-24px !important}#base-container:before{height:64px;}.game-bar .battlelog-logo{position:absolute;top:0px;left:30px;z-index:1000}.game-bar .battlelog-logo .logo{display:block;width:70px;height:48px;background:url(//d34ymitoc1pg7m.cloudfront.net/common/battlelog-logo-082bd9ee.png) 0 50% no-repeat;background-size:contain;}#uioverlay .uioverlaysectionleft{left:20px !important;}</style>").appendTo("head");
 
     // Delay to wait for BattleLogs weird DOM
     setTimeout(function() { waitForBattleLog(); }, 550);
@@ -64,3 +64,7 @@ var showSidePanel = function() {
 };
 
 checkjQuery();
+
+window.onbeforeunload = function() {
+    return "Are you sure you want to leave? If you're in a queue your spot will be lost!";
+};
