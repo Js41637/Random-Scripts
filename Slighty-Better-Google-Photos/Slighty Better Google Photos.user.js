@@ -1,14 +1,14 @@
 // ==UserScript==
 // @name        Slighty Better Google Photos
-// @version     0.2
+// @version     0.3
 // @author      Js41637
 // @match       https://photos.google.com/collections
 // @grant       none
-// @run-at      document-body
+// @run-at      document-end
 // ==/UserScript==
 
 // Inject CSS into page
-var css = '.MTmRkb{max-width:49.8%}.jZ7Nke{transition: opacity .2s ease-in-out;opacity:0',
+var css = '.MTmRkb{max-width:49.8%;background-color:white!important}.MTmRkb:hover .FLmEnf{opacity:0.95}.jZ7Nke{transition: opacity .2s ease-in-out;opacity:0}',
     head = document.head,
     style = document.createElement('style');
 style.type = 'text/css';
