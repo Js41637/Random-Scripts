@@ -1,38 +1,43 @@
 // ==UserScript==
 // @name        Slighty Better Google Photos
-// @version     0.3
+// @version     0.4
 // @author      Js41637
-// @match       https://photos.google.com/collections
+// @match       https://photos.google.com/*
 // @grant       none
-// @run-at      document-end
+// @run-at      document-start
 // ==/UserScript==
 
 // Inject CSS into page
-var css = '.MTmRkb{max-width:49.8%;background-color:white!important}.MTmRkb:hover .FLmEnf{opacity:0.95}.jZ7Nke{transition: opacity .2s ease-in-out;opacity:0}',
+var css = '.MTmRkb{max-width:49.8%;background-color:white!important}.FLmEnf{transition: 0.2s opacity ease-in-out}.MTmRkb:hover .FLmEnf{opacity:0.93}.jZ7Nke{transition: opacity .2s ease-in-out;opacity:0}',
     head = document.head,
     style = document.createElement('style');
 style.type = 'text/css';
 style.appendChild(document.createTextNode(css));
 head.appendChild(style);
 
-// Select all the albums
-var domAlbums = document.querySelectorAll('.MTmRkb');
-var normalAlbums = [];
-var gameAlbums = [];
+var loadedOnPage = true;
 
-for (var i=0; i < domAlbums.length; i++) {
-	var out = {
-		name: domAlbums[i].querySelector('.FmgwTd').innerText,
-		html: domAlbums[i]
+var domAlbums, normalAlbums = [], gameAlbums = [];
+var albumsContainer, newGroup, gamesGroup, normalGroup, normalHeader, gameHeader;
+	
+// Select all the albums
+function getAlbumsOnPage() {
+	domAlbums = document.querySelectorAll('.MTmRkb');
+	for (var i=0; i < domAlbums.length; i++) {
+		var out = {
+			name: domAlbums[i].querySelector('.FmgwTd').innerText,
+			html: domAlbums[i]
+		}
+		if (out.name && out.name.indexOf('Games') > -1) {
+			gameAlbums.push(out);
+		} else {
+			normalAlbums.push(out);
+		}
 	}
-	if (out.name && out.name.indexOf('Games') > -1) {
-		gameAlbums.push(out);
-	} else {
-		normalAlbums.push(out);
-	}
-}
+};
+
 // Sort array by name alphabetically
-var sortAlbumsByName = function() {
+function sortAlbumsByName() {
 	normalAlbums.sort(function(a,b) {
 		if(a.name < b.name) return -1;
 	    if(a.name > b.name) return 1;
@@ -43,30 +48,33 @@ var sortAlbumsByName = function() {
 	    if(a.name > b.name) return 1;
 	    return 0;
 	})
-}
+};
 
 // Umm, create new group for albums and yeah
 // #nojQueryLyfe
-var container = document.querySelector('.jZ7Nke');
-var newGroup = document.createElement('div');
-newGroup.className = 'Iwe7i';
-newGroup.id = 'gamesAlbum';
-container.appendChild(newGroup);
-var gamesGroup = document.querySelector('#gamesAlbum');
-var normalGroup = document.querySelector('.Iwe7i');
-
-var updateAlbumsOnPage = function() {
-	sortAlbumsByName();
-	// Don't kill me
+function createAlbumGroups() {
+	normalGroup = document.querySelector('.Iwe7i');
 	normalGroup.innerHTML = '';
-	var normalHeader = document.createElement('h2');
+	albumsContainer = document.querySelector('.jZ7Nke');
+	newGroup = document.createElement('div');
+	newGroup.className = 'Iwe7i';
+	newGroup.id = 'gamesAlbum';
+	albumsContainer.appendChild(newGroup);
+	gamesGroup = document.querySelector('#gamesAlbum');
+	normalHeader = document.createElement('h2');
 	normalHeader.style.width = '100%';
 	normalHeader.innerText = 'Wallpapers'
 	normalGroup.appendChild(normalHeader);
-	var gameHeader = document.createElement('h2');
+	gameHeader = document.createElement('h2');
 	gameHeader.style.width = '100%';
 	gameHeader.innerText = 'Game Wallpapers'
 	gamesGroup.appendChild(gameHeader);
+	console.info("Done Creating Album Groups");
+};
+
+function updateAlbumsOnPage() {
+	sortAlbumsByName();
+	createAlbumGroups();
 
 	// Readd normal albums in order
 	for (var i = 0; i < normalAlbums.length; i++) {
@@ -76,9 +84,21 @@ var updateAlbumsOnPage = function() {
 	for (var i = 0; i < gameAlbums.length; i++) {
 		gamesGroup.appendChild(gameAlbums[i].html);
 	};
-	container.style.opacity = 1;
-}
+	albumsContainer.style.opacity = 1;
+};
 
-// Need a timeout google loads the small images first and then updates it to bigger version
-// Updating page before this happens will cause the images to not update
-setTimeout(function(){ updateAlbumsOnPage(); }, 1000);
+function delayedInit() {
+	if (document.URL.indexOf('collections') > -1) {
+		if (loadedOnPage) {
+			getAlbumsOnPage();
+			updateAlbumsOnPage();
+		} else {
+			setTimeout(function(){ getAlbumsOnPage();updateAlbumsOnPage(); }, 1000);
+		}
+	} else {
+		loadedOnPage = false;
+		setTimeout(function(){ delayedInit(); }, 200);
+	}
+};
+
+setTimeout(function(){ delayedInit(); }, 1000);
