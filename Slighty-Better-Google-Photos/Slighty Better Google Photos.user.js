@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Slighty Better Google Photos
-// @version     0.4
+// @version     1.0
 // @author      Js41637
-// @match       https://photos.google.com/*
+// @match       *://photos.google.com/*
 // @grant       none
 // @run-at      document-start
 // ==/UserScript==
@@ -69,7 +69,6 @@ function createAlbumGroups() {
 	gameHeader.style.width = '100%';
 	gameHeader.innerText = 'Game Wallpapers'
 	gamesGroup.appendChild(gameHeader);
-	console.info("Done Creating Album Groups");
 };
 
 function updateAlbumsOnPage() {
@@ -86,7 +85,14 @@ function updateAlbumsOnPage() {
 	};
 	albumsContainer.style.opacity = 1;
 };
-
+/** Loading thingy
+ * The script loads on any google photos page but this script only affects the /collections so we need to load at
+ * the right time and give google time to do its thing.
+ * 
+ * If we load directly onto the /collections page after the initial 1000ms delayed init, update the page immediately.
+ * If we didn't load onto the /collections page, set loadedOnPage to false and check every 200ms if we have
+ * changed to the /collections page and once we have, do a 1000ms timeout before updating albums
+ */
 function delayedInit() {
 	if (document.URL.indexOf('collections') > -1) {
 		if (loadedOnPage) {
