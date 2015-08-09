@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name        Slightly Better Battlelog
-// @version     1.3
+// @version     1.4
 // @author      Js41637
-// @match       http://battlelog.battlefield.com/bf4/*
+// @match       *://battlelog.battlefield.com/bf4/*
 // @grant       none
 // @run-at      document-body
 // ==/UserScript==
@@ -28,7 +28,7 @@ var initialize = function() {
     $J = jQuery;
 
     // Minified CSS to add into the page
-    $J("<style type='text/css'>#toggle-sidepanel{position:fixed;right:-24px;transform:rotate(90deg);top:37px;background-color:rgba(0,0,0,.6);padding:10px;z-index:5000;font-size:15px;text-transform:uppercase;transition:background-color,right .2s ease-in-out;cursor:pointer}#toggle-sidepanel:hover{background-color:rgba(60,60,60,.5)}#comcenter-friends{width:0;transition:width .2s ease-in-out}#base-bf4-html #base-header,#base-bf4-html #unified-game-manager{right:0;transition:right .2s ease-in-out}#base-bf4-html #viewport{padding-right:0;transition:padding .2s ease-in-out}#base-bf4-html #base-background{margin-left:0;transition:margin .2s ease-in-out}.show-sidepanel #comcenter-friends{width:237px!important}.show-sidepanel #base-header,.show-sidepanel #unified-game-manager{right:237px!important}.show-sidepanel #viewport{padding-right:237px!important}.show-sidepanel #toggle-sidepanel{right:213px!important}#base-container:before{height:64px}.game-bar .battlelog-logo{position:absolute;top:0;left:30px;z-index:1000}.game-bar .battlelog-logo .logo{display:block;width:70px;height:48px;background:url(//d34ymitoc1pg7m.cloudfront.net/common/battlelog-logo-082bd9ee.png) 0 50% no-repeat;background-size:contain}#uioverlay .uioverlaysectionleft{left:20px!important}#selected-server-scoreboard .box-content{min-height:67px}#comcenter-tab-friends-content{width:237px!important}#bblog-icon{top:58px!important}#bblog-teamspeak{top:217px!important}#serverbrowser .servers-list tbody .server-row{height:63px}#base-header-secondary-nav{line-height:initial}#friendlist-header .icon-search{display:none}.show-sidepanel #friendlist-header .icon-search{display:initial}.main-header .suggestions .suggestion .image{margin:10% 0}#main-postlistsmall footer:hover{background:rgba(7,7,7,0.6)!important}.get-bfh-tile,#cookie-preferences,#serverbrowser-show .bblog-local-comment{display:none}#cookie-preferences</style>").appendTo("head");
+    $J("<style type='text/css'>#toggle-sidepanel{position:fixed;right:-24px;transform:rotate(90deg);top:37px;background-color:rgba(0,0,0,.75);padding:10px;z-index:5000;font-size:15px;text-transform:uppercase;transition:background-color,right .2s ease-in-out;cursor:pointer}#toggle-sidepanel:hover{background-color:rgba(60,60,60,.6)}#comcenter-friends{width:0;transition:width .2s ease-in-out;background:rgba(0, 0, 0, 0.8)}#base-bf4-html #base-header,#base-bf4-html #unified-game-manager{right:0}#base-bf4-html #viewport{padding-right:0}#base-bf4-html #base-background{margin-left:0}.show-sidepanel #comcenter-friends{width:237px!important}.show-sidepanel #toggle-sidepanel{right:213px!important}#base-container:before{height:64px}.game-bar .battlelog-logo{position:absolute;top:0;left:30px;z-index:1000}.game-bar .battlelog-logo .logo{display:block;width:70px;height:48px;background:url(//d34ymitoc1pg7m.cloudfront.net/common/battlelog-logo-082bd9ee.png) 0 50% no-repeat;background-size:contain}#uioverlay .uioverlaysectionleft{left:20px!important}#selected-server-scoreboard .box-content{min-height:67px}#comcenter-tab-friends-content{width:237px!important}#bblog-icon{top:58px!important}#bblog-teamspeak{top:217px!important}#serverbrowser .servers-list tbody .server-row{height:63px}#base-header-secondary-nav{line-height:initial}#friendlist-header .icon-search{display:none}.show-sidepanel #friendlist-header .icon-search{display:initial}.main-header .suggestions .suggestion .image{margin:10% 0}#main-postlistsmall footer:hover{background:rgba(7,7,7,0.6)!important}.get-bfh-tile,#cookie-preferences,#serverbrowser-show .bblog-local-comment{display:none}#uioverlay{width: 100% !important;height:calc(100% + 16px)}</style>").appendTo("head");
 
     // Delay to wait for BattleLogs weird DOM
     setTimeout(function() { waitForBattleLog(); }, 650);
@@ -75,6 +75,7 @@ var showSidePanel = function() {
 function waitForSurface() {
     if (window.Surface) {
         console.info("Surface found!");
+        fixBattleScreen();
         Surface.Renderer.updateElement = function(replaceEl, html) {
             if(replaceEl && html) {
                 replaceEl.innerHTML = Surface.Renderer.createElement(html).innerHTML;
@@ -108,3 +109,62 @@ function monitorPage() {
         }
     }, 3000);
 }*/
+
+/* Override BattleScreens render function */
+function fixBattleScreen() {
+    BattleScreen.prototype.render = function(timestamp) {
+        if (!bs) {
+            return;
+        }
+        window.requestAnimationFrame(this.render.bind(this));
+        var width = window.innerWidth,
+            height = window.innerHeight;
+        if (!S.globalContext.standalone) {
+            if (S.globalContext.staticContext.detectedBrowser.isTouchDevice) {
+                width = 1024;
+            } if ($("#base-header").is(":visible")) {
+                height -= headerHeight;
+            }
+        }
+        if (width != this.curWinWidth || height != this.curWinHeight) {
+            this.curWinWidth = width;
+            this.curWinHeight = height;
+            this.canvas.width = this.curWinWidth;
+            this.canvas.height = this.curWinHeight;
+            if (this.connection.isConnected) {
+                this.minimap.calculateBounds();
+            }
+            this.staticNoise = null;
+            this.uiOverlay.resize(this.curWinWidth, this.curWinHeight);
+        }
+        this.canvas.width = this.canvas.width;
+        this.uiOverlay.update();
+        var csize = Math.min(this.curWinWidth, this.curWinHeight);
+        this.iconScale = csize / 768;
+        if (this.iconScale > 1) {
+            this.iconScale = 1;
+        }
+        this.minimap.draw(this.ctx, this.canvas.width, this.canvas.height);
+        var i, len;
+        for (i = 0, len = this.targets.length; i < len; ++i) {
+            this.targets[i].draw();
+        }
+        for (i = 0; i < this.num_players; ++i) {
+            if (i != this.localPlayerIdx) {
+                this.players[i].draw();
+            }
+        }
+        for (i = 0; i < this.num_vehicles; ++i) {
+            this.vehicles[i].draw();
+        }
+        for (i = 0, len = this.chainlinks.length; i < len; ++i) {
+            this.chainlinks[i].draw();
+        }
+        if (bs.orderAnimation) {
+            bs.orderAnimation.draw();
+        }
+        if (this.localPlayerIdx != -1) {
+            this.players[this.localPlayerIdx].draw();
+        }
+    };
+}
