@@ -1,17 +1,27 @@
 // ==UserScript==
 // @name        Slightly Better Battlelog
-// @version     1.4
+// @version     1.5
 // @author      Js41637
 // @match       *://battlelog.battlefield.com/bf4/*
 // @grant       none
-// @run-at      document-body
+// @run-at      document-start
 // ==/UserScript==
 
-//TODO: Don't load script on Login Page
+console.info("Slighty-Better-BattleLog Loading");
 
 // 1 = hidden, 0 = shown. Hide by default
-var status = 1;
+var status = 1,
+    $J;
 //var checkPageChange = null;
+
+// Inject CSS into page
+console.info("Injecting CSS into page");
+var css = '#community-bar{display:none}#content{margin-bottom:35px}#toggle-sidepanel{position:fixed;right:-24px;transform:rotate(90deg);top:37px;background-color:rgba(0,0,0,.75);padding:10px;z-index:5000;font-size:15px;text-transform:uppercase;transition:background-color,right .2s ease-in-out;cursor:pointer}#toggle-sidepanel:hover{background-color:rgba(60,60,60,.6)}#comcenter-friends{width:0!important;transition:width .2s ease-in-out;background-color:rgba(0, 0, 0, 0.8)!important}#base-bf4-html #base-header,#base-bf4-html #unified-game-manager{right:0}#base-bf4-html #viewport{padding-right:0}#base-bf4-html #base-background{margin-left:0}.show-sidepanel #comcenter-friends{width:237px!important}.show-sidepanel #toggle-sidepanel{right:213px!important}#base-container:before{height:64px}.game-bar .battlelog-logo{position:absolute;top:0;left:30px;z-index:1000}.game-bar .battlelog-logo .logo{display:block;width:70px;height:48px;background:url(//d34ymitoc1pg7m.cloudfront.net/common/battlelog-logo-082bd9ee.png) 0 50% no-repeat;background-size:contain}#uioverlay .uioverlaysectionleft{left:20px!important}#selected-server-scoreboard .box-content{min-height:67px}#comcenter-tab-friends-content{width:237px!important}#bblog-icon{top:58px!important}#bblog-teamspeak{top:217px!important}#serverbrowser .servers-list tbody .server-row{height:63px}#base-header-secondary-nav{line-height:initial}#friendlist-header .icon-search{display:none}.show-sidepanel #friendlist-header .icon-search{display:initial}.main-header .suggestions .suggestion .image{margin:10% 0}#main-postlistsmall footer:hover{background:rgba(7,7,7,0.6)!important}.get-bfh-tile,#cookie-preferences,#serverbrowser-show .bblog-local-comment{display:none}#uioverlay{width: 100% !important;height:calc(100% + 16px)}#footer-wrapper{display:none}#weapon-statistics .sticky-scroll{position:absolute!important;right:-84px;width:404px}#weapon-statistics .sticky-scroll.fixed{position:fixed!important;right:initial}'
+    head = document.head,
+    style = document.createElement('style');
+style.type = 'text/css';
+style.appendChild(document.createTextNode(css));
+head.appendChild(style);
 
 function checkjQuery() {
     if (window.jQuery) {
@@ -19,16 +29,13 @@ function checkjQuery() {
         initialize();
     } else {
         console.info("Waiting for jQuery");
-        setTimeout(function() { checkjQuery() }, 50);
+        setTimeout(function() { checkjQuery() }, 500);
     }
 }
 
 var initialize = function() {
-    console.info("Loading CSS and Waiting for BattleLog");
+    console.info("Waiting for BattleLog to load");
     $J = jQuery;
-
-    // Minified CSS to add into the page
-    $J("<style type='text/css'>#toggle-sidepanel{position:fixed;right:-24px;transform:rotate(90deg);top:37px;background-color:rgba(0,0,0,.75);padding:10px;z-index:5000;font-size:15px;text-transform:uppercase;transition:background-color,right .2s ease-in-out;cursor:pointer}#toggle-sidepanel:hover{background-color:rgba(60,60,60,.6)}#comcenter-friends{width:0;transition:width .2s ease-in-out;background:rgba(0, 0, 0, 0.8)}#base-bf4-html #base-header,#base-bf4-html #unified-game-manager{right:0}#base-bf4-html #viewport{padding-right:0}#base-bf4-html #base-background{margin-left:0}.show-sidepanel #comcenter-friends{width:237px!important}.show-sidepanel #toggle-sidepanel{right:213px!important}#base-container:before{height:64px}.game-bar .battlelog-logo{position:absolute;top:0;left:30px;z-index:1000}.game-bar .battlelog-logo .logo{display:block;width:70px;height:48px;background:url(//d34ymitoc1pg7m.cloudfront.net/common/battlelog-logo-082bd9ee.png) 0 50% no-repeat;background-size:contain}#uioverlay .uioverlaysectionleft{left:20px!important}#selected-server-scoreboard .box-content{min-height:67px}#comcenter-tab-friends-content{width:237px!important}#bblog-icon{top:58px!important}#bblog-teamspeak{top:217px!important}#serverbrowser .servers-list tbody .server-row{height:63px}#base-header-secondary-nav{line-height:initial}#friendlist-header .icon-search{display:none}.show-sidepanel #friendlist-header .icon-search{display:initial}.main-header .suggestions .suggestion .image{margin:10% 0}#main-postlistsmall footer:hover{background:rgba(7,7,7,0.6)!important}.get-bfh-tile,#cookie-preferences,#serverbrowser-show .bblog-local-comment{display:none}#uioverlay{width: 100% !important;height:calc(100% + 16px)}</style>").appendTo("head");
 
     // Delay to wait for BattleLogs weird DOM
     setTimeout(function() { waitForBattleLog(); }, 650);
@@ -53,7 +60,6 @@ var waitForBattleLog = function() {
     $J('#base-header-user-tools').appendTo($J('#base-header-secondary-nav'));
     // Moves the battlelog logo to secondary header and then removes top header
     $J('#community-bar .battlelog-logo').appendTo($J('#base-header .game-bar'));
-    $J('#community-bar').empty();
 
     // Wait for Surface to be defined
     waitForSurface();
@@ -84,7 +90,7 @@ function waitForSurface() {
         //monitorPage();
     } else {
         console.info("Waiting for Surface");
-        setTimeout(function() { waitForSurface() }, 1000);
+        setTimeout(function() { waitForSurface() }, 500);
     }
 }
 
