@@ -1,8 +1,6 @@
 Userscripts
 ===========
-
 Random Userscripts for stuff
-
 
 Hide-Empty-Steam-Showcases
 ===========
@@ -11,6 +9,10 @@ Removes the option on the profile to add another showcase.
 Im-Blue
 ===========
 Steam's New Theme Song when it updated it's theme.
+
+Remove-Other-BF4-Game-Mode-Assignments
+===========
+Removes all the Battlefield 4 assignments that require playing game modes other than Conquest so that you have a better idea of what assignments you've done and what left without clogging it up with assignments from other gamemodes that you won't play
 
 Slighty-Better-BattleLog
 ===========
