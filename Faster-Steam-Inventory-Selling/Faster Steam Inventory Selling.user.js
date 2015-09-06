@@ -6,19 +6,31 @@
 // @grant        none
 // ==/UserScript==
 
-// Removes the second confirmation page after entering a price.
+/** 
+ * Removes the annoying second confirmation page after entering a price that cant 
+ * be accepted with an enter like the first one.
+ * After entering a price and pressing enter it will automatically click the second confirmation button
+ * 
+ * Has to be on the body, doesn't work anywhere else for some reason.
+ **/
 jQuery("body").keyup(function(event) {
-    if(event.keyCode == 13) {
-    	jQuery("#market_sell_dialog_ok span").click();
-    }
+	// This will fire on every enter but does nothing unless the first page has been confirmed
+  if (event.keyCode == 13) { // 13 = enter key
+  	jQuery("#market_sell_dialog_ok span").click();
+  }
 });
 
-// Override reload function to prevent reload and disable currently selected item
+/**
+ * Overrides the ReloadInventory function to prevent a full inventory reload
+ * after selling an item that is like a 3 second delay
+ * After selling an item the inventory won't reload, instead it will fade the item out.
+ **/
 CUserYou.prototype.ReloadInventory = function() {
+	// Why we do we need all this to select a single item :/
 	var appID = g_ActiveInventory.appid,
-		contextID = g_ActiveInventory.selectedItem.contextid,
-		itemID = g_ActiveInventory.selectedItem.id;
+			contextID = g_ActiveInventory.selectedItem.contextid,
+			itemID = g_ActiveInventory.selectedItem.id;
 
-	jQuery("#item" + appID + "_" + contextID + "_" + itemID).css("opacity", "0.45");
+	jQuery("#item" + appID + "_" + contextID + "_" + itemID).css("opacity", "0.4");
 	jQuery("#item" + appID + "_" + contextID + "_" + itemID).css("pointer-events", "none");
 }
