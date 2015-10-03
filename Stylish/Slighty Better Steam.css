@@ -1,0 +1,19 @@
+/**
+ * Slighty Better Steam
+ *
+ * Applies to:
+ *  - URLs matching the regexp: ^https?://steamcommunity.com/(id|profile)/(.+)/inventory
+ */
+
+.item_scrap_actions {
+    display: none;
+}
+
+.item_market_actions {
+    min-height: 147px;
+}
+
+.item_desc_descriptors {
+    max-height: 150px;
+    overflow: auto;
+}
