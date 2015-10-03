@@ -10,12 +10,10 @@ Changes various things about Battlelog. Adds the option to toggle the sidepanel 
 Removes all the Battlefield 4 assignments that require playing game modes other than Conquest so that you have a better idea of what assignments you've done and what left without clogging it up with assignments from other gamemodes that you won't play.
 
 ===========
-
 ##Slighty Better Google Photos
 Some personal modifications I made to make Google Photos a bit better for myself, sorting my Wallpapers into groups and alphabetically.
 
 ===========
-
 ##Steam
 
 ###Faster Steam Inventory Selling
