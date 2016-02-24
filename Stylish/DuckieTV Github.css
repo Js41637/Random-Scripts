@@ -5,20 +5,22 @@
  *  - URLs starting with: https://github.com/SchizoDuckie/DuckieTV
  */
 
- span.mega-octicon.octicon-repo {
-    top: 1px;
+h1 .octicon.octicon-repo {
+    top: 1px !important;
     background-image: url(https://raw.githubusercontent.com/SchizoDuckie/DuckieTV/angular/img/logo/icon48.png);
     width: 48px;
     height: 48px;
     -webkit-filter: invert(1);
     opacity: 0.75;
     left: -4px;
+    margin-top: -13px !important;
+    line-height: 32px !important;
 }
 
-span.mega-octicon.octicon-repo:before {
-    content: "";
+h1 .octicon.octicon-repo path {
+    display: none;
 }
 
 .repohead h1 {
-    padding-left: 49px;
+    padding-left: 49px !important;
 }
