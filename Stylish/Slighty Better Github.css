@@ -4,49 +4,13 @@
  *  - URLs on the domain: github.com
  */
 
-/* Keep headers the same */
-.header .container {
-    width: 980px;
-}
-.pagehead .container {
-    width: 980px;
-}
-/* Keep the Dashboard (news feed) the same */
-#dashboard {
-    width: 980px;
-    margin: 0 auto;
-}
-
 /* Span the file and commit viewer across the whole page */
-.container {
-    width: 65%;
-}
-/* 100% of the 85% factoring in the sidebar and 20px padding */
-.repository-with-sidebar .repository-content {
-    width: calc(100% - 58px);
-}
-.repository-with-sidebar.with-full-navigation .repository-content {
-    width: calc(100% - 190px);
-}
-.repository-with-sidebar.repo-container.new-discussion-timeline .discussion-timeline {
-    width: calc(100% - 162px);
+.container.new-discussion-timeline {
+    width: 75%;
 }
 
-.commit.full-commit {
-    position: relative;
-    min-height: 201px;
-    margin-bottom: 45px;
-}
-.commit.full-commit .commit-meta.clearfix {
-    position: absolute;
-    bottom: -33px;
-    right: 7px;
-    left: 7px;
-    border-top: 0 !important;
-    border: 1px solid;
-    border-color: #246 !important;
-}
-#files {
-    width: 130%;
-    margin-left: -15%;
+/* Fix for issues/pullrequests layout
+100% of the container - the sidebar - 20px padding */
+#discussion_bucket .discussion-timeline {
+    width: calc(100% - 220px);
 }

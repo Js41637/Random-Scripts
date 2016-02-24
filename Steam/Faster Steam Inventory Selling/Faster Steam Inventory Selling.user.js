@@ -31,6 +31,6 @@ CUserYou.prototype.ReloadInventory = function() {
 			contextID = g_ActiveInventory.selectedItem.contextid,
 			itemID = g_ActiveInventory.selectedItem.id;
 
-	jQuery("#item" + appID + "_" + contextID + "_" + itemID).css("opacity", "0.4");
+	jQuery("#item" + appID + "_" + contextID + "_" + itemID).css("opacity", "0.3");
 	jQuery("#item" + appID + "_" + contextID + "_" + itemID).css("pointer-events", "none");
 }
