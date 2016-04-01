@@ -7,6 +7,7 @@
 // ==/UserScript==
 
 $('#customs_table tr:first-of-type').append('<th>MessageID</th>')
-$('#customs_table tr:not(:first-of-type)').each(function(i) {
-	$(this).append('<td>' + this.id.slice(4, -1) + '</td>')
+var messages = $('#customs_table tr:not(:first-of-type)');
+messages.each(function(i) {
+	$(this).append('<td class="msgID">' + this.id.slice(4, messages.length) + '</td>')
 })
