@@ -2,109 +2,137 @@
 // @name        Slighty Better Google Photos
 // @version     1.0
 // @author      Js41637
-// @match       *://photos.google.com/*
+// @match       *://photos.google.com/albums
 // @grant       none
 // @run-at      document-start
 // ==/UserScript==
 
 // Inject CSS into page
-var css = '.MTmRkb{max-width:49.8%;background-color:white!important}.FLmEnf{transition: 0.2s opacity ease-in-out}.MTmRkb:hover .FLmEnf{opacity:0.93}.jZ7Nke{transition: opacity .2s ease-in-out;opacity:0}',
-    head = document.head,
-    style = document.createElement('style');
+var css = '.MTmRkb{transition: opacity 0.1s;} .MTmRkb:hover {opacity: 0.95;}',
+  head = document.head,
+  style = document.createElement('style');
 style.type = 'text/css';
 style.appendChild(document.createTextNode(css));
 head.appendChild(style);
 
-var loadedOnPage = true;
+var Albums = {
+  Misc: [],
+  Wallpapers: [],
+  "Game Wallpapers": []
+};
 
-var domAlbums, normalAlbums = [], gameAlbums = [];
-var albumsContainer, newGroup, gamesGroup, normalGroup, normalHeader, gameHeader;
-	
+var selectors = {
+  rootContainer: '.jZ7Nke',
+  albumsContainer: '.Iwe7i',
+  albums: '.MTmRkb',
+  albumPad: '.D14YYd'
+};
+
 // Select all the albums
 function getAlbumsOnPage() {
-	domAlbums = document.querySelectorAll('.MTmRkb');
-	for (var i=0; i < domAlbums.length; i++) {
-		var out = {
-			name: domAlbums[i].querySelector('.FmgwTd').innerText,
-			html: domAlbums[i]
-		}
-		if (out.name && out.name.indexOf('Games') > -1) {
-			gameAlbums.push(out);
-		} else {
-			normalAlbums.push(out);
-		}
-	}
-};
+  return new Promise(function(resolve) {
+    document.querySelectorAll(selectors.albums).forEach(function(album) {
+      var out = {
+        name: album.querySelector('.FmgwTd').innerText,
+        html: album
+      };
+      if (out.name.indexOf('Wallpapers') === 0) {
+        out.name.indexOf('Games') > 0 ? Albums['Game Wallpapers'].push(out) : Albums.Wallpapers.push(out);
+      } else {
+        Albums.Misc.push(out);
+      }
+    });
+    padding = document.querySelectorAll(selectors.albumPad);
+    return resolve(true);
+  });
+}
 
 // Sort array by name alphabetically
+// Feel free to cringe
 function sortAlbumsByName() {
-	normalAlbums.sort(function(a,b) {
-		if(a.name < b.name) return -1;
-	    if(a.name > b.name) return 1;
-	    return 0;
-	})
-	gameAlbums.sort(function(a,b) {
-		if(a.name < b.name) return -1;
-	    if(a.name > b.name) return 1;
-	    return 0;
-	})
-};
+  return new Promise(function(resolve) {
+    Albums.Wallpapers.sort(function(a, b) {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+    Albums['Game Wallpapers'].sort(function(a, b) {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+    Albums.Misc.sort(function(a, b) {
+      if (a.name < b.name) return -1;
+      if (a.name > b.name) return 1;
+      return 0;
+    });
+    return resolve(true);
+  });
+}
+
+// To prevent the flexbox showing 1 massive fucking image
+function addPaddingToAlbums() {
+  return new Promise(function(resolve) {
+    for (var Album in Albums) {
+      for (var i = 0; i < 13; i++) {
+        // Apparently you need to create a new element every time, adding the same element gets ignored
+        var pad = document.createElement('div');
+        pad.className = selectors.albumPad.slice(1);
+        var out = {
+          name: 'pad',
+          html: pad
+        };
+        Albums[Album].push(out);
+      }
+    }
+    return resolve(true);
+  });
+}
 
 // Umm, create new group for albums and yeah
 // #nojQueryLyfe
 function createAlbumGroups() {
-	normalGroup = document.querySelector('.Iwe7i');
-	normalGroup.innerHTML = '';
-	albumsContainer = document.querySelector('.jZ7Nke');
-	newGroup = document.createElement('div');
-	newGroup.className = 'Iwe7i';
-	newGroup.id = 'gamesAlbum';
-	albumsContainer.appendChild(newGroup);
-	gamesGroup = document.querySelector('#gamesAlbum');
-	normalHeader = document.createElement('h2');
-	normalHeader.style.width = '100%';
-	normalHeader.innerText = 'Wallpapers'
-	normalGroup.appendChild(normalHeader);
-	gameHeader = document.createElement('h2');
-	gameHeader.style.width = '100%';
-	gameHeader.innerText = 'Game Wallpapers'
-	gamesGroup.appendChild(gameHeader);
-};
+  return new Promise(function(resolve) {
+    // Set shit up
+    var rootContainer = document.querySelector(selectors.rootContainer),
+      albumsContainer = document.querySelector(selectors.albumsContainer);
 
+    // Blank Slate
+    albumsContainer.remove();
+
+    // Setup new albums
+    for (var Album in Albums) {
+      // Set shit up
+      var newAlbum = document.createElement('div'),
+        newHeader = document.createElement('h2');
+      newAlbum.id = Album.split(' ').join('');
+      newAlbum.className = selectors.albumsContainer.slice(1);
+      newHeader.innerText = Album;
+      newHeader.style.width = '100%';
+      newAlbum.appendChild(newHeader);
+      rootContainer.appendChild(newAlbum);
+    }
+    return resolve(true);
+  });
+}
+
+// Starts of the magic and then adds the albums to their respective categories
 function updateAlbumsOnPage() {
-	sortAlbumsByName();
-	createAlbumGroups();
+  getAlbumsOnPage()
+    .then(sortAlbumsByName())
+    .then(addPaddingToAlbums())
+    .then(createAlbumGroups())
+    .then(function() {
+      for (var Album in Albums) {
+        var curAlbum = document.querySelector('#' + Album.split(' ').join(''));
+        Albums[Album].forEach(function(album) {
+          curAlbum.appendChild(album.html);
+        });
+      }
+    });
+}
 
-	// Readd normal albums in order
-	for (var i = 0; i < normalAlbums.length; i++) {
-		normalGroup.appendChild(normalAlbums[i].html);
-	};
-	// Add the games album to its group in order
-	for (var i = 0; i < gameAlbums.length; i++) {
-		gamesGroup.appendChild(gameAlbums[i].html);
-	};
-	albumsContainer.style.opacity = 1;
-};
-/** Loading thingy
- * The script loads on any google photos page but this script only affects the /collections so we need to load at
- * the right time and give google time to do its thing.
- * 
- * If we load directly onto the /collections page after the initial 1000ms delayed init, update the page immediately.
- * If we didn't load onto the /collections page, set loadedOnPage to false and check every 200ms if we have
- * changed to the /collections page and once we have, do a 1000ms timeout before updating albums
- */
-function delayedInit() {
-	if (document.URL.indexOf('collections') > -1) {
-		if (loadedOnPage) {
-			getAlbumsOnPage();
-			updateAlbumsOnPage();
-		} else {
-			setTimeout(function(){ getAlbumsOnPage();updateAlbumsOnPage(); }, 1000);
-		}
-	} else {
-		loadedOnPage = false;
-		setTimeout(function(){ delayedInit(); }, 200);
-	}
-};
-
-setTimeout(function(){ delayedInit(); }, 1000);
+// 1 second delay before messing with the DOM
+setTimeout(function() {
+  updateAlbumsOnPage();
+}, 1000);
