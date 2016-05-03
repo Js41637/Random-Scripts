@@ -30,17 +30,18 @@ var selectors = {
 
 // Select all the albums and sort em into groups
 function getAlbumsOnPage() {
-  document.querySelectorAll(selectors.albums).forEach(function(album) {
+  var shit = document.querySelectorAll(selectors.albums);
+  for (var i = 0; i < shit.length; i++) {
     var out = {
-      name: album.querySelector('.FmgwTd').innerText,
-      html: album
+      name: shit[i].querySelector('.FmgwTd').innerText,
+      html: shit[i]
     };
     if (out.name.indexOf('Wallpapers') === 0) {
       out.name.indexOf('Games') > 0 ? Albums['Game Wallpapers'].push(out) : Albums.Wallpapers.push(out);
     } else {
       Albums.Misc.push(out);
     }
-  });
+  };
 }
 
 // Sort array by name alphabetically
