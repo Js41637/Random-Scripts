@@ -12,8 +12,9 @@
 var steamID = undefined;
 var APIKey = undefined;
 var gamesURL = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=token&steamid=%q%';
-var steamGames = null;
-var bundledGames = null;
+var bundles;
+var steamGames = [];
+var bundledGames = [];
 
 function getSteamGames() {
   return new Promise(function(resolve, reject) {
@@ -25,11 +26,9 @@ function getSteamGames() {
     makeRequest('GET', 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=' + APIKey + '&steamid=' + steamID, function(err, resp) {
       if (!err && resp) {
         console.info("Got games", resp.response.games.length);
-        var appIDs = [];
         for (var i = 0; i < resp.response.games.length; i++) {
-          appIDs.push(resp.response.games[i].appid);
+          steamGames.push(resp.response.games[i].appid);
         }
-        steamGames = appIDs;
         resolve();
       } else {
         console.error("Returned an error", resp);
@@ -41,27 +40,39 @@ function getSteamGames() {
 
 var attempts = 0;
 
-function matchGamesOnPage() {
-  bundledGames = angular.element(document.querySelector('.panel-group')).scope();
-
-  if (!bundledGames && attempts < 2) {
-    setTimeout(function() {
-      console.info("Couldn't find bundled games, trying again");
-      matchGamesOnPage();
-    }, 1000);
-    attempts++;
-    return;
-  } else if (!bundledGames) {
-    console.info("Error fetching bundled Games");
-    return;
+function getBundles(done) {
+  if (angular.element(document.querySelector('.col-xs-12.col-md-8.col-md-pull-4')).scope()) {
+    console.info("Got bundles");
+    bundles = angular.element(document.querySelector('.col-xs-12.col-md-8.col-md-pull-4')).scope().product.bundles;
+    done();
+  } else {
+    if (attempts < 5) {
+      console.info("Unable to fetch bundles, trying again in 1 second");
+      setTimeout(function() {
+        getBundles();
+      }, 1200);
+    } else {
+      console.info("Error fetching bundles after 5 tries");
+    }
   }
+}
 
-  bundledGames = angular.element(document.querySelector('.panel-group')).scope().tier.games;
+function getGamesOnPage() {
+  return new Promise(function(resolve) {
+    bundles.forEach(function(bundle) {
+      bundle.games.forEach(function(game) {
+        bundledGames.push(game.steam.id);
+      });
+    });
+    console.info("Found games", bundledGames.length);
+    return resolve();
+  });
+}
 
+function matchGames() {
   var matched = 0;
-  console.info("Matching games", bundledGames.length);
   for (var i = 0; i < bundledGames.length; i++) {
-    if (steamGames.indexOf(bundledGames[i].steam.id) != -1) {
+    if (steamGames.indexOf(bundledGames[i]) != -1) {
       matched++;
       document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.backgroundColor = 'rgba(72, 239, 72, 0.3)';
     }
@@ -83,5 +94,9 @@ function makeRequest(method, url, done) {
 }
 
 setTimeout(function() {
-  getSteamGames().then(matchGamesOnPage);
-}, 2000);
+  getSteamGames().then(function() {
+    getBundles(function() {
+      getGamesOnPage().then(matchGames);
+    });
+  });
+}, 1000);
