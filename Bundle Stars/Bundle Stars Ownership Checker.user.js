@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Bundle Stars Game Ownership Checker
-// @version      0.1
+// @version      0.3
 // @description  Checks games in the bundle if you own them on Steam
 // @author       Js41637
 // @match        https://www.bundlestars.com/*/bundle/*
@@ -11,7 +11,6 @@
 
 var steamID = undefined;
 var APIKey = undefined;
-var gamesURL = 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=token&steamid=%q%';
 var bundles;
 var steamGames = [];
 var bundledGames = [];
@@ -38,23 +37,29 @@ function getSteamGames() {
   });
 }
 
-var attempts = 0;
+function getBundles() {
+  return new Promise(function(resolve, reject) {
+    var attempts = 0;
 
-function getBundles(done) {
-  if (angular.element(document.querySelector('.col-xs-12.col-md-8.col-md-pull-4')).scope()) {
-    console.info("Got bundles");
-    bundles = angular.element(document.querySelector('.col-xs-12.col-md-8.col-md-pull-4')).scope().product.bundles;
-    done();
-  } else {
-    if (attempts < 5) {
-      console.info("Unable to fetch bundles, trying again in 1 second");
-      setTimeout(function() {
-        getBundles();
-      }, 1200);
-    } else {
-      console.info("Error fetching bundles after 5 tries");
+    function _getBundles() {
+      if (angular.element(document.querySelector('.col-xs-12.col-md-8.col-md-pull-4')).scope()) {
+        console.info("Got bundles");
+        bundles = angular.element(document.querySelector('.col-xs-12.col-md-8.col-md-pull-4')).scope().product.bundles;
+        resolve();
+      } else {
+        if (attempts < 5) {
+          console.info("Unable to fetch bundles, trying again in 1 second");
+          setTimeout(function() {
+            _getBundles();
+          }, 1200);
+        } else {
+          console.info("Error fetching bundles after 5 tries");
+          reject();
+        }
+      }
     }
-  }
+    _getBundles();
+  });
 }
 
 function getGamesOnPage() {
@@ -94,9 +99,8 @@ function makeRequest(method, url, done) {
 }
 
 setTimeout(function() {
-  getSteamGames().then(function() {
-    getBundles(function() {
-      getGamesOnPage().then(matchGames);
-    });
-  });
+  getSteamGames()
+    .then(getBundles)
+    .then(getGamesOnPage)
+    .then(matchGames);
 }, 1000);
