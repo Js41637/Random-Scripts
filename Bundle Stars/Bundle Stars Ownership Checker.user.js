@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Bundle Stars Game Ownership Checker
-// @version      0.4
+// @version      0.5
 // @description  Checks games in the bundle if you own them on Steam
 // @author       Js41637
 // @match        https://www.bundlestars.com/*/bundle/*
@@ -126,4 +126,4 @@ setTimeout(function() {
     .then(getGamesOnPage)
     .then(checkTradingCards)
     .then(matchGames);
-}, 1000);
+}, 1500);
