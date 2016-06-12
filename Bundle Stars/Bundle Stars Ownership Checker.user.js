@@ -48,10 +48,10 @@ function getBundles() {
         resolve();
       } else {
         if (attempts < 5) {
-          console.info("Unable to fetch bundles, trying again in 1 second");
+          console.info("Unable to fetch bundles, trying again");
           setTimeout(function() {
             _getBundles();
-          }, 1200);
+          }, 1500);
         } else {
           console.info("Error fetching bundles after 5 tries");
           reject();
@@ -63,11 +63,13 @@ function getBundles() {
 }
 
 function getGamesOnPage() {
-
   return new Promise(function(resolve) {
     bundles.forEach(function(bundle) {
       bundle.games.forEach(function(game) {
-        bundledGames.push(game.steam.id);
+        bundledGames.push({
+          appid: game.steam.id,
+          features: game.features
+        });
       });
     });
     console.info("Found games", bundledGames.length);
@@ -75,14 +77,33 @@ function getGamesOnPage() {
   });
 }
 
+function checkTradingCards() {
+  return new Promise(function(resolve) {
+    var matched = 0;
+    bundledGames.forEach(function(game, index) {
+      game.features.forEach(function(feature) {
+        if (feature == 'Steam Trading Cards') {
+          matched++;
+          bundledGames[index].tradingCards = true;
+        }
+      });
+    });
+    console.info("Found", matched, 'games with trading cards');
+    return resolve();
+  });
+}
+
 function matchGames() {
   var matched = 0;
-  for (var i = 0; i < bundledGames.length; i++) {
-    if (steamGames.indexOf(bundledGames[i]) != -1) {
+  bundledGames.forEach(function(game, i) {
+    if (steamGames.indexOf(game.appid) != -1) {
       matched++;
-      document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.backgroundColor = 'rgba(72, 239, 72, 0.3)';
+      document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.backgroundColor = 'rgba(72, 239, 72, 0.4)';
     }
-  }
+    if (game.tradingCards) {
+      document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.borderRight = '5px solid lightseagreen';
+    }
+  });
   console.info(matched ? 'Matched ' + matched + ' games' : 'Matched no games');
 }
 
@@ -103,5 +124,6 @@ setTimeout(function() {
   getSteamGames()
     .then(getBundles)
     .then(getGamesOnPage)
+    .then(checkTradingCards)
     .then(matchGames);
 }, 1000);
