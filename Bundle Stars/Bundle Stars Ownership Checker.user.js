@@ -1,16 +1,15 @@
 // ==UserScript==
 // @name         Bundle Stars Game Ownership Checker
-// @version      0.3
+// @version      0.4
 // @description  Checks games in the bundle if you own them on Steam
 // @author       Js41637
 // @match        https://www.bundlestars.com/*/bundle/*
-// @connect      api.steampowered.com
+// @connect      steamcommunity.com
 // @grant        GM_xmlhttpRequest
 // @run-at       document-end
 // ==/UserScript==
 
 var steamID = undefined;
-var APIKey = undefined;
 var bundles;
 var steamGames = [];
 var bundledGames = [];
@@ -18,15 +17,16 @@ var bundledGames = [];
 function getSteamGames() {
   return new Promise(function(resolve, reject) {
     console.info("Getting steam games");
-    if (!steamID || !APIKey) {
-      return console.error("Error! No SteamID or Steam API Key set");
+    if (!steamID) {
+      return console.error("Error! No SteamID Key set");
     }
 
-    makeRequest('GET', 'http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=' + APIKey + '&steamid=' + steamID, function(err, resp) {
+    makeRequest('GET', 'http://steamcommunity.com/profiles/' + steamID + '/games/?tab=all&xml=1', function(err, resp) {
       if (!err && resp) {
-        console.info("Got games", resp.response.games.length);
-        for (var i = 0; i < resp.response.games.length; i++) {
-          steamGames.push(resp.response.games[i].appid);
+        var games = resp.getElementsByTagName('game');
+        console.info("Got games", games.length);
+        for (var i = 0; i < games.length; i++) {
+          steamGames.push(parseInt(games[i].childNodes[1].innerHTML));
         }
         resolve();
       } else {
@@ -63,6 +63,7 @@ function getBundles() {
 }
 
 function getGamesOnPage() {
+
   return new Promise(function(resolve) {
     bundles.forEach(function(bundle) {
       bundle.games.forEach(function(game) {
@@ -90,7 +91,7 @@ function makeRequest(method, url, done) {
     method: method,
     url: url,
     onload: function(response) {
-      done(false, JSON.parse(response.responseText));
+      done(false, response.responseXML);
     },
     onerror: function(response) {
       done(true, response);
