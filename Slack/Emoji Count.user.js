@@ -21,7 +21,7 @@ emojis.forEach(function(emoji) {
 
 var text = '<h5 id="ec_count">You currently have ' + emojis.length + ' custom Emoji added by ' + Object.keys(users).length + ' people</h5>';
 var detailsText = ' <a id="ec_viewDetails">View Details</a>';
-$('#custom_emoji').prepend(text);
+$(text).insertBefore('#custom_emoji');
 $('#ec_count').append(detailsText);
 
 var sorted = Object.keys(users).sort(function(a, b) {
