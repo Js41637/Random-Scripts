@@ -3,8 +3,7 @@
 // @version      0.1
 // @description  Adds a delete button to the file list
 // @author       Js41637
-// @match        https://*.slack.com/files
-// @match        https://*.slack.com/files/*
+// @match        https://*.slack.com/files*
 // @exclude      https://*.slack.com/files/*/*
 // ==/UserScript==
 
