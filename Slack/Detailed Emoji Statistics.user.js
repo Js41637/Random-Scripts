@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Emoji Count
-// @version      0.2
+// @name         Detailed Slack Emoji Statistics
+// @version      0.3
 // @description  Displays how many custom emojis you got
 // @author       Js41637
-// @match        https://*.slack.com/customize/emoji
+// @match        https://*.slack.com/customize/emoji*
 // ==/UserScript==
 
 var emojis = document.querySelectorAll('#custom_emoji tbody > .emoji_row');
