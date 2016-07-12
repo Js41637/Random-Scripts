@@ -4,6 +4,11 @@
  *  - URLs on the domain: github.com
  */
 
+/* Fuck this new font off */
+body, .markdown-body {
+     font-family: 'Arial';
+ }
+
 /* Span the file and commit viewer across the whole page */
 .container.new-discussion-timeline {
     width: 75%;
