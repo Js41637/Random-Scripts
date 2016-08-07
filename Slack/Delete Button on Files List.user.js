@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Delete Slack File
-// @version      0.2
+// @version      0.3
 // @description  Adds a delete button to the file list
 // @author       Js41637
 // @match        https://*.slack.com/files*
@@ -35,13 +35,21 @@ function addDeleteButtonToFiles() {
   files.each(function(i, file) {
     var fileID = file.getAttribute('data-file-id');
     if (fileID) {
-      fileIDs.push(fileID);
       $(deleteFileButton).attr('data-file-id', fileID).insertBefore($(file).find('.file_star'));
     } else {
       return console.error("Found no file ID for file", i);
     }
   });
   bindClicks();
+}
+
+function getFiles() {
+  fileIDs = [];
+  files.each(function(i, file) {
+    var fileID = file.getAttribute('data-file-id');
+    if ($(file).find('.starred').length) return;
+    fileIDs.push(fileID);
+  });
 }
 
 function bindClicks() {
@@ -71,9 +79,10 @@ function hoverButtons() {
 function addDeleteAllButton() {
   var delAll = $(deleteAllButton).insertBefore($('.col.span_1_of_3'));
   delAll.click(function() {
+    getFiles();
     TS.generic_dialog.start({
       title: "Delete files",
-      body: "Are you sure you want to permanently delete all files on this page? Dis can not be undone!",
+      body: "Are you sure you want to permanently delete all files on this page? Dis can not be undone! Note: This won't delete starred files",
       show_cancel_button: true,
       show_go_button: true,
       go_button_class: "btn_danger",
