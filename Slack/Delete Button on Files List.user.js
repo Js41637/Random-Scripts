@@ -4,7 +4,8 @@
 // @description  Adds a delete button to the file list
 // @author       Js41637
 // @match        https://*.slack.com/files*
-// @exclude      https://*.slack.com/files/*/*
+// @match        https://*.slack.com/files*
+// @exclude      https://*.slack.com/files/*/*/*
 // ==/UserScript==
 
 var deleteAllButton = '<a class="df_deleteAll btn btn_danger small_right_margin small_bottom_margin"><i class="ts_icon ts_icon_trash small_right_margin"></i>Delete all on page</a>';
