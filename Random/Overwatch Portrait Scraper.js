@@ -3,13 +3,12 @@ const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F']
 
 const start = '0x0250000000000'
 let index = 9
-let index2 = 0
 
 let container = document.createElement('div')
 container.id = "border_cont"
 container = document.body.appendChild(container)
 
-var doShit = () => {
+var doShit = (index2) => {
   numbers.forEach((num) => {
     let currentNumber = start + index + index2 + num
     let borderURL = url + currentNumber + '_Border.png'
@@ -25,21 +24,18 @@ var doShit = () => {
       thing.appendChild(img)
       thing.appendChild(img2)
       thing.innerHTML = thing.innerHTML + currentNumber
-
     })
   })
-  index2++
 }
 
 let offset = 0
-for(var i = 0; i < 10; i++) {
+numbers.forEach(number => {
   setTimeout(() => {
-    console.info("~~ STARTING", start + index + index2)
-    doShit()
+    console.info("~~ STARTING", start + index + number)
+    doShit(number)
   }, 2000 + offset);
   offset += 2000
-
-}
+})
 
 var makeRequest = what => {
   return new Promise((resolve, reject) => {
