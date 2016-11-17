@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name        Slighty Better Google Photos
-// @version     1.1
+// @version     1.2
 // @author      Js41637
 // @match       *://photos.google.com/albums
 // @grant       none
@@ -18,7 +18,8 @@ head.appendChild(style);
 var Albums = {
   Misc: [],
   Wallpapers: [],
-  "Game Wallpapers": []
+  "Game Wallpapers": [],
+  "Overwatch Wallpapers": []
 };
 
 var selectors = {
@@ -37,11 +38,20 @@ function getAlbumsOnPage() {
       html: shit[i]
     };
     if (out.name.indexOf('Wallpapers') === 0) {
-      out.name.indexOf('Games') > 0 ? Albums['Game Wallpapers'].push(out) : Albums.Wallpapers.push(out);
+      if (out.name.includes('Games')) {
+        if (out.name.includes("Overwatch")) {
+          Albums['Overwatch Wallpapers'].push(out);
+        }
+        else {
+          Albums['Game Wallpapers'].push(out);
+        }
+      } else {
+        Albums.Wallpapers.push(out);
+      }
     } else {
       Albums.Misc.push(out);
     }
-  };
+  }
 }
 
 // Sort array by name alphabetically
@@ -53,6 +63,11 @@ function sortAlbumsByName() {
     return 0;
   });
   Albums['Game Wallpapers'].sort(function(a, b) {
+    if (a.name < b.name) return -1;
+    if (a.name > b.name) return 1;
+    return 0;
+  });
+  Albums['Overwatch Wallpapers'].sort(function(a, b) {
     if (a.name < b.name) return -1;
     if (a.name > b.name) return 1;
     return 0;
