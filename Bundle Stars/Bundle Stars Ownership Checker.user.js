@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Bundle Stars Game Ownership Checker
-// @version      0.5
+// @version      0.6
 // @description  Checks games in the bundle if you own them on Steam
 // @author       Js41637
 // @match        https://www.bundlestars.com/*/bundle/*
@@ -13,6 +13,37 @@ var steamID = undefined;
 var bundles;
 var steamGames = [];
 var bundledGames = [];
+
+var css = `
+.navbar .container {
+  position: relative;
+}
+
+#thingy {
+  position: absolute;
+  right: -30px;
+  top: 19px;
+  width: 20px;
+  background-color: grey;
+  height: 20px;
+  border-radius: 10px;
+}
+#thingy.good {
+  background-color: green;
+}
+#thingy.bad {
+  background-color: red;
+}
+`
+
+setTimeout(function() {
+  var style = document.createElement('style');
+  style.innerHTML = css;
+  document.head.appendChild(style);
+  var div = document.createElement('div')
+  div.id = 'thingy'
+  document.querySelector('.navbar .container').appendChild(div)
+}, 1000);
 
 function getSteamGames() {
   return new Promise(function(resolve, reject) {
@@ -94,17 +125,20 @@ function checkTradingCards() {
 }
 
 function matchGames() {
-  var matched = 0;
-  bundledGames.forEach(function(game, i) {
-    if (steamGames.indexOf(game.appid) != -1) {
-      matched++;
-      document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.backgroundColor = 'rgba(72, 239, 72, 0.4)';
-    }
-    if (game.tradingCards) {
-      document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.borderRight = '5px solid lightseagreen';
-    }
+  return new Promise(function(resolve) {
+    var matched = 0;
+    bundledGames.forEach(function(game, i) {
+      if (steamGames.indexOf(game.appid) != -1) {
+        matched++;
+        document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.backgroundColor = 'rgba(72, 239, 72, 0.4)';
+      }
+      if (game.tradingCards) {
+        document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.borderRight = '5px solid lightseagreen';
+      }
+    });
+    console.info(matched ? 'Matched ' + matched + ' games' : 'Matched no games');
+    resolve();
   });
-  console.info(matched ? 'Matched ' + matched + ' games' : 'Matched no games');
 }
 
 function makeRequest(method, url, done) {
@@ -120,10 +154,22 @@ function makeRequest(method, url, done) {
   });
 }
 
+function ohNo() {
+  document.querySelector('#thingy').classList.remove('good');
+  document.querySelector('#thingy').classList.add('bad');
+}
+
+function allG() {
+  document.querySelector('#thingy').classList.remove('bad');
+  document.querySelector('#thingy').classList.add('good');
+}
+
 setTimeout(function() {
   getSteamGames()
     .then(getBundles)
     .then(getGamesOnPage)
     .then(checkTradingCards)
-    .then(matchGames);
+    .then(matchGames)
+    .then(allG)
+    .catch(ohNo);
 }, 1500);
