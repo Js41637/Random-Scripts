@@ -14,7 +14,8 @@
       "Promise": true,
       "GM_xmlhttpRequest": true,
       "angular": true,
-      "$": true
+      "$": true,
+      "$J": true
     },
     "plugins": [],
     "extends": "eslint:recommended",

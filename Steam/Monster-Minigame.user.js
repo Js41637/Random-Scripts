@@ -1,5 +1,5 @@
-// ==UserScript== 
-// @name Steam Monster MiniGame Auto Play Script
+// ==UserScript==
+// @name [Steam] Monster MiniGame Auto Play Script
 // @author Js41637
 // @description A script that runs the Steam Monster Minigame for you.
 // @version 1.1
@@ -30,7 +30,7 @@ var ITEMS = {
 	"CRIPPLE_SPAWNER": 14,
 	"MAXIMIZE_ELEMENT": 16
 };
-	
+
 var ENEMY_TYPE = {
 	"SPAWNER":0,
 	"CREEP":1,
@@ -64,7 +64,7 @@ function doTheThing() {
 	isAlreadyRunning = true;
 
 	g_msTickRate = 1100;
-	
+
 	goToLaneWithBestTarget();
 	useMedicsIfRelevant();
 	attemptRespawn();
@@ -170,7 +170,7 @@ function goToLaneWithBestTarget() {
 		}
 		targetFound = true;
 	}
-	
+
 	// Switch to the chosen lane and target
 	if (targetFound) {
 		// Switch to chose lane if it isn't already active
@@ -178,7 +178,7 @@ function goToLaneWithBestTarget() {
 			console.info('switching lanes');
 			g_Minigame.CurrentScene().TryChangeLane(targetLane);
 		}
-		
+
 		// Target chosen even if it isn't already selected
 		if (g_Minigame.CurrentScene().m_nTarget != targetEnemy) {
 			console.info('switching targets');
@@ -189,13 +189,13 @@ function goToLaneWithBestTarget() {
 
 function useMedicsIfRelevant() {
 	var myMaxHealth = g_Minigame.CurrentScene().m_rgPlayerTechTree.max_hp;
-	
+
 	// check if health is below 50%
 	var hpPercent = g_Minigame.CurrentScene().m_rgPlayerData.hp / myMaxHealth;
 	if (hpPercent > 0.5 || g_Minigame.CurrentScene().m_rgPlayerData.hp < 1) {
 		return; // no need to heal - HP is above 50% or already dead
 	}
-	
+
 	// check if Medics is purchased and cooled down
 	if (hasPurchasedAbility(ABILITIES.MEDIC) && !isAbilityCoolingDown(ABILITIES.MEDIC)) {
 
@@ -203,7 +203,7 @@ function useMedicsIfRelevant() {
 		//console.log('Medics is purchased, cooled down, and needed. Trigger it.');
 		triggerAbility(ABILITIES.MEDIC);
 	} else if (hasItem(ITEMS.GOD_MODE) && !isAbilityCoolingDown(ITEMS.GOD_MODE)) {
-		
+
 		//console.log('We have god mode, cooled down, and needed. Trigger it.');
 		triggerItem(ITEMS.GOD_MODE);
 	}
@@ -211,7 +211,7 @@ function useMedicsIfRelevant() {
 
 //If player is dead, call respawn method
 function attemptRespawn() {
-	if ((g_Minigame.CurrentScene().m_bIsDead) && 
+	if ((g_Minigame.CurrentScene().m_bIsDead) &&
 			((g_Minigame.CurrentScene().m_rgPlayerData.time_died * 1000) + 5000) < (new Date().getTime())) {
 		RespawnPlayer();
 	}
@@ -261,7 +261,7 @@ function start() {
 			return emitter;
 		};
 	}, 1000);
-	
+
 }
 
 function clickTheThing() {

@@ -1,16 +1,16 @@
 // ==UserScript==
-// @name         Faster-Steam-Inventory-Selling
+// @name         [Steam] Faster Inventor ySelling
 // @version      0.2
 // @author       Js41637
 // @match        http://steamcommunity.com/id/*/inventory*
 // @grant        none
 // ==/UserScript==
 
-/** 
- * Removes the annoying second confirmation page after entering a price that cant 
+/**
+ * Removes the annoying second confirmation page after entering a price that cant
  * be accepted with an enter like the first one.
  * After entering a price and pressing enter it will automatically click the second confirmation button
- * 
+ *
  * Has to be on the body, doesn't work anywhere else for some reason.
  **/
 jQuery("body").keyup(function(event) {

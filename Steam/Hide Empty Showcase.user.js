@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Hide Empty Showcase
+// @name         [Steam] Hide Empty Showcase
 // @version      0.3
 // @description  Hides the empty showcase
 // @author       Js41637

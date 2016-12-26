@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Christmas Profile - Non-Steam Version
+// @name         [Steam] Christmas Profile - Non-Steam Version
 // @version      1.3.2
 // @description  Client Side Christmas Themed Profile
 // @author       Js41637

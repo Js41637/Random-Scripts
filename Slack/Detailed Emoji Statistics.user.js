@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Detailed Slack Emoji Statistics
+// @name         [Slack] Detailed Emoji Statistics
 // @version      0.3
 // @description  Displays how many custom emojis you got
 // @author       Js41637

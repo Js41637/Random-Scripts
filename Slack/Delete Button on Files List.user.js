@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Delete Slack File
+// @name         [Slack] Bulk Delete Slack Files
 // @version      0.3
 // @description  Adds a delete button to the file list
 // @author       Js41637

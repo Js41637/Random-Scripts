@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Steam Column Friends List
+// @name         [Steam] Column Friends List
 // @version      1.0.0
 // @description  Changes the friends list so its a column not a grid.
 // @author       Js41637
