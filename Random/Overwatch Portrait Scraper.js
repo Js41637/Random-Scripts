@@ -24,7 +24,9 @@ var doShit = (index2) => {
       thing.appendChild(img)
       thing.appendChild(img2)
       thing.innerHTML = thing.innerHTML + currentNumber
-    })
+    }).catch(
+      console.info("Failed fetching")
+    )
   })
 }
 
@@ -45,6 +47,7 @@ var makeRequest = what => {
       if(this.readyState === 4) {
         if(this.status === 403) return reject()
         else if(this.status === 0) return resolve()
+        else if(this.status === 200) return resolve()
         else {
           console.info("Got unknown response", this.status)
         }
