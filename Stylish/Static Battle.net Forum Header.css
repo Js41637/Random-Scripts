@@ -1,0 +1,15 @@
+/**
+ * Static Battle.net Forum Header
+ *
+ * Applies to:
+ *  - URLs starting with: https://us.battle.net/forums
+ */
+
+.Topic-header {
+    position: sticky;
+    top: 0px;
+    z-index: 1000;
+    background-color: rgba(60,60,60,0.5);
+    padding: 1.5rem;
+    text-shadow: 2px 2px black;
+}
