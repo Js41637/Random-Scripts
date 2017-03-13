@@ -4,12 +4,13 @@
 // @description  Checks games in the bundle if you own them on Steam
 // @author       Js41637
 // @match        https://www.bundlestars.com/*/bundle/*
-// @connect      steamcommunity.com
+// @connect      api.steampowered.com
 // @grant        GM_xmlhttpRequest
 // @run-at       document-end
 // ==/UserScript==
 
 var steamID = undefined;
+var apikey = undefined;
 var bundles;
 var steamGames = [];
 var bundledGames = [];
@@ -48,20 +49,20 @@ setTimeout(function() {
 function getSteamGames() {
   return new Promise(function(resolve, reject) {
     console.info("Getting steam games");
-    if (!steamID) {
-      return console.error("Error! No SteamID Key set");
+    if (!steamID || !apikey) {
+      return console.error("Error! No SteamID Key or API Key set");
     }
 
-    makeRequest('GET', 'http://steamcommunity.com/profiles/' + steamID + '/games/?tab=all&xml=1', function(err, resp) {
-      if (!err && resp) {
-        var games = resp.getElementsByTagName('game');
-        console.info("Got games", games.length);
-        for (var i = 0; i < games.length; i++) {
-          steamGames.push(parseInt(games[i].childNodes[1].innerHTML));
-        }
+    var url =  `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apikey}&steamid=${steamID}`
+    makeRequest('GET', url, function(err, data) {
+      if (!err && data) {
+        console.log(data)
+        data.response.games.forEach(function(game) {
+          steamGames.push(game.appid);
+        })
         resolve();
       } else {
-        console.error("Returned an error", resp);
+        console.error("Returned an error", data);
         reject();
       }
     });
@@ -146,7 +147,12 @@ function makeRequest(method, url, done) {
     method: method,
     url: url,
     onload: function(response) {
-      done(false, response.responseXML);
+      try {
+        done(false, JSON.parse(response.response));
+      } catch (e) {
+        console.error("Error prasing response JSON", e);
+        done(true, response);
+      }
     },
     onerror: function(response) {
       done(true, response);
