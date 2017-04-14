@@ -1,8 +1,10 @@
 const url = 'https://blzgdapipro-a.akamaihd.net/game/playerlevelrewards/'
 const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F']
 
+// Goes through 0x0250000000000 + index (9) + small numbers (01, 02, 03... FD, FE, FF)
+// 0x0250000000000|9|00 > 0x0250000000000|9|FF
 const start = '0x0250000000000'
-let index = 9
+let index = '9'
 
 let container = document.createElement('div')
 container.id = "border_cont"
