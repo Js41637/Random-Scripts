@@ -13,6 +13,8 @@ methods.forEach(method => {
   const category = methodData.querySelector('.label-category').innerText || 'Unknown'
   const since = ((methodData.querySelector('p:first-of-type small') || {}).innerText || '').split(' ')[2] || 'Unknown'
 
+  // Replace all <code> </code> elements with ` so Slack knows they're code blocks
+  //  grabs the innerHTML, replaces all code elements, converts back to HTML then gets the innerText
   var description = ((methodData.querySelector('div.description') || {}).innerHTML || '')
   const parser = new DOMParser()
   const { body } = parser.parseFromString(description.replace(/(<code>|<\/code>)/g, '`'), 'text/html')
