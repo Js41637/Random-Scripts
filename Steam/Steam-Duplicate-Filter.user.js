@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name          [Steam] Duplicate Item Filter
 // @author        Js41637
-// @version       1.0.0
+// @version       1.1.0
 // @description   Adds a duplicate filter to Steams inventory filter options
 // @match					*://steamcommunity.com/*/inventory
 // @match					*://steamcommunity.com/*/inventory*
@@ -11,10 +11,10 @@
 var OriginalCInventoryAddInventoryData = CInventory.prototype.AddInventoryData;
 var OriginalCInventoryLoadMoreAssets = CInventory.prototype.LoadMoreAssets;
 
-// Steam loads a fixed amound, hijack any LoadMoreAsset calls and tell it to load 2000
+// Steam loads a fixed amount, hijack any LoadMoreAsset calls and tell it to load 2500
 CInventory.prototype.LoadMoreAssets = function() {
 	console.log("Load More Assets");
-	return OriginalCInventoryLoadMoreAssets.call(this, 2000);
+	return OriginalCInventoryLoadMoreAssets.call(this, 2500);
 };
 
 var classids = [];
@@ -28,6 +28,13 @@ CInventory.prototype.AddInventoryData = function(data) {
 		internal_name: "duplicate",
 		localized_category_name: "Misc",
 		localized_tag_name: "Duplicate"
+	};
+
+	var marketableDuplicateFilter = {
+		category: "misc",
+		internal_name: "m_duplicate",
+		localized_category_name: "Misc",
+		localized_tag_name: "Marketable Duplicates"
 	};
 
 	if (data.assets) {
@@ -47,8 +54,15 @@ CInventory.prototype.AddInventoryData = function(data) {
 		for (var b = 0; b < data.descriptions.length; b++) {
 			var description = data.descriptions[b];
 			var id = description.classid;
-			if (duplicates.includes(id) && description.tags) {
+			var marketable = description.marketable;
+			if (!description.tags) {
+				description.tags = [];
+			}
+			if (duplicates.includes(id)) {
 				description.tags.push(duplicateFilter);
+				if (marketable) {
+					description.tags.push(marketableDuplicateFilter);
+				}
 			}
 		}
 	}
