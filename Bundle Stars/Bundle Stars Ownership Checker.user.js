@@ -35,15 +35,24 @@ var css = `
 #thingy.bad {
   background-color: red;
 }
-`
+#bundleStats {
+  font-size: 15px;
+  text-align: center;
+  border-top: 1px solid rgb(128, 128, 128);
+  border-bottom: 1px solid rgb(128, 128, 128);
+  padding: 4px 0;
+  font-family: monospace;
+  font-weight: bold;
+}
+`;
 
 setTimeout(function() {
   var style = document.createElement('style');
   style.innerHTML = css;
   document.head.appendChild(style);
-  var div = document.createElement('div')
-  div.id = 'thingy'
-  document.querySelector('.navbar .container').appendChild(div)
+  var div = document.createElement('div');
+  div.id = 'thingy';
+  document.querySelector('.navbar .container').appendChild(div);
 }, 1000);
 
 function getSteamGames() {
@@ -53,13 +62,12 @@ function getSteamGames() {
       return console.error("Error! No SteamID Key or API Key set");
     }
 
-    var url =  `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apikey}&steamid=${steamID}`
+    var url =  `http://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key=${apikey}&steamid=${steamID}`;
     makeRequest('GET', url, function(err, data) {
       if (!err && data) {
-        console.log(data)
         data.response.games.forEach(function(game) {
           steamGames.push(game.appid);
-        })
+        });
         resolve();
       } else {
         console.error("Returned an error", data);
@@ -128,15 +136,32 @@ function checkTradingCards() {
 function matchGames() {
   return new Promise(function(resolve) {
     var matched = 0;
+    var trading = 0;
     bundledGames.forEach(function(game, i) {
       if (steamGames.indexOf(game.appid) != -1) {
         matched++;
         document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.backgroundColor = 'rgba(72, 239, 72, 0.4)';
       }
       if (game.tradingCards) {
+        trading++;
         document.querySelectorAll('.panel-group .panel')[i].querySelector('.panel-heading').style.borderRight = '5px solid lightseagreen';
       }
     });
+
+    var statsMessage = [
+      bundledGames.length,
+      'games in total |',
+      matched,
+      'games already owned |',
+      trading,
+      'games with trading cards'
+    ];
+
+    var statsElm = document.createElement('div');
+    statsElm.id="bundleStats";
+    statsElm.innerText = statsMessage.join(' ');
+    insertAfter(statsElm, document.querySelector('.bundle-desc:last-of-type'));
+
     console.info(matched ? 'Matched ' + matched + ' games' : 'Matched no games');
     resolve();
   });
@@ -168,6 +193,11 @@ function ohNo() {
 function allG() {
   document.querySelector('#thingy').classList.remove('bad');
   document.querySelector('#thingy').classList.add('good');
+}
+
+// https://stackoverflow.com/a/4793630
+function insertAfter(newNode, referenceNode) {
+  referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
 setTimeout(function() {
