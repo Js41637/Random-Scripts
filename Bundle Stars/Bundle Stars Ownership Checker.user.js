@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Bundle Stars Game Ownership Checker
-// @version      0.6
+// @version      1.0
 // @description  Checks games in the bundle if you own them on Steam
 // @author       Js41637
 // @match        https://www.bundlestars.com/*/bundle/*
@@ -43,6 +43,21 @@ var css = `
   padding: 4px 0;
   font-family: monospace;
   font-weight: bold;
+  width: 1200px;
+}
+.panel-group {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  width: 1200px;
+  justify-content: space-between;
+}
+.panel-group .panel {
+  width: 49.8%;
+  margin-top: 0 !important;
+}
+.product-side-nudge .well:last-of-type, .product-side-nudge .well.product-age {
+  display: none;
 }
 `;
 
