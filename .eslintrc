@@ -15,11 +15,13 @@
       "GM_xmlhttpRequest": true,
       "angular": true,
       "$": true,
-      "$J": true
+      "$J": true,
+      "CInventory": true
     },
     "plugins": [],
     "extends": "eslint:recommended",
     "rules": {
-        "no-console": "off"
+        "no-console": "off",
+        "semi": 2
     }
 }

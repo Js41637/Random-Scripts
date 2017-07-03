@@ -121,9 +121,11 @@ function getGamesOnPage() {
   return new Promise(function(resolve) {
     bundles.forEach(function(bundle) {
       bundle.games.forEach(function(game) {
+        if (!game.display) return; // Some games are not longer included? Timed exclusives?
         bundledGames.push({
           appid: game.steam.id,
-          features: game.features
+          isDLC: game.display_type === 'dlc',
+          hasTradingCards: game.features.includes('Steam Trading Cards')
         });
       });
     });
@@ -136,12 +138,10 @@ function checkTradingCards() {
   return new Promise(function(resolve) {
     var matched = 0;
     bundledGames.forEach(function(game, index) {
-      game.features.forEach(function(feature) {
-        if (feature == 'Steam Trading Cards') {
-          matched++;
-          bundledGames[index].tradingCards = true;
-        }
-      });
+      if (game.hasTradingCards && !game.isDLC) {
+        matched++;
+        bundledGames[index].tradingCards = true;
+      }
     });
     console.info("Found", matched, 'games with trading cards');
     return resolve();
