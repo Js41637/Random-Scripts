@@ -46,10 +46,10 @@ var sorted = Object.keys(users).sort(function(a, b) {
 
 var list = sorted.map(function(user) {
   var out = user + ': ' + users[user];
-  if (users_by_type['Image'][user]) {
+  if (users_by_type['Image'] && users_by_type['Image'][user]) {
     out += ', Images:' + users_by_type['Image'][user];
   }
-  if (users_by_type['Alias'][user]) {
+  if (users_by_type['Alias'] && users_by_type['Alias'][user]) {
     out += ', Aliases:' + users_by_type['Alias'][user];
   }
   return out;
