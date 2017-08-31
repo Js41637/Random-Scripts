@@ -1,20 +1,23 @@
 // ==UserScript==
 // @name         [Slack] Detailed Emoji Statistics
-// @version      0.3
+// @version      0.4
 // @description  Displays how many custom emojis you got
 // @author       Js41637
 // @match        https://*.slack.com/customize/emoji*
 // ==/UserScript==
 
 var emojis = document.querySelectorAll('#custom_emoji tbody > .emoji_row');
-var users = {};
-var users_by_type = {};
+var userTotal = {};
+var users_by_type = {
+  "Image": {},
+  "Alias": {}
+};
 
 var expanded = false;
 
 emojis.forEach(function(emoji) {
   var adder = emoji.querySelector('.author_cell').innerText.trim();
-  var type = emoji.querySelector('[headers="custom_emoji_type"').innerText.trim().slice(0, 5);
+  var type = emoji.querySelector('[headers="custom_emoji_type"]').innerText.split(' ')[0].trim();
 
   if (users_by_type[type]) {
     if (adder in users_by_type[type]) {
@@ -28,34 +31,37 @@ emojis.forEach(function(emoji) {
     users_by_type[type] = user;
   }
 
-  if (adder in users) {
-    users[adder]++;
+  if (adder in userTotal) {
+    userTotal[adder]++;
   } else {
-    users[adder] = 1;
+    userTotal[adder] = 1;
   }
 });
 
-var text = '<h5 id="ec_count">You currently have ' + emojis.length + ' custom Emoji added by ' + Object.keys(users).length + ' people</h5>';
+var text = '<h5 id="ec_count">You currently have ' + emojis.length + ' custom Emoji added by ' + Object.keys(userTotal).length + ' people</h5>';
 var detailsText = ' <a id="ec_viewDetails">View Details</a>';
 $(text).insertBefore('#custom_emoji');
 $('#ec_count').append(detailsText);
 
-var sorted = Object.keys(users).sort(function(a, b) {
-  return users[b] - users[a];
+var sorted = Object.keys(userTotal).sort(function(a, b) {
+  return userTotal[b] - userTotal[a];
 });
 
+function col(text) {
+  return '<td>' + text + '</td>';
+}
+
+function table(cols) {
+  return '<table class="full_width"><tbody><tr><th>User</th><th>Images</th><th>Aliases</th><th>Total</th></tr>' + cols.join('\n') + '</tbody></table>';
+}
+
 var list = sorted.map(function(user) {
-  var out = user + ': ' + users[user];
-  if (users_by_type['Image'] && users_by_type['Image'][user]) {
-    out += ', Images:' + users_by_type['Image'][user];
-  }
-  if (users_by_type['Alias'] && users_by_type['Alias'][user]) {
-    out += ', Aliases:' + users_by_type['Alias'][user];
-  }
-  return out;
+  var cols = col(user) + col(users_by_type.Image[user] || 0) + col(users_by_type.Alias[user] || 0) + col(userTotal[user]);
+  return '<tr>' + cols + '</tr>';
 });
-var listTemplate = '<div id="ec_list" style="display: none">' + list.join('<br>') + '</div>';
-$('#ec_count').append(listTemplate);
+
+var listTemplate = '<div id="ec_list" style="display:none">' + table(list) + '</div>';
+$(listTemplate).insertAfter('#ec_count');
 $('#ec_viewDetails').click(function() {
   if (!expanded) {
     expanded = true;
