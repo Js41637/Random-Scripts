@@ -8,10 +8,26 @@
 
 var emojis = document.querySelectorAll('#custom_emoji tbody > .emoji_row');
 var users = {};
+var users_by_type = {};
+
 var expanded = false;
 
 emojis.forEach(function(emoji) {
   var adder = emoji.querySelector('.author_cell').innerText.trim();
+  var type = emoji.querySelector('[headers="custom_emoji_type"').innerText.trim().slice(0, 5);
+
+  if (users_by_type[type]) {
+    if (adder in users_by_type[type]) {
+      users_by_type[type][adder]++;
+    } else {
+      users_by_type[type][adder] = 1;
+    }
+  } else {
+    var user = {};
+    user[adder] = 1;
+    users_by_type[type] = user;
+  }
+
   if (adder in users) {
     users[adder]++;
   } else {
@@ -29,7 +45,14 @@ var sorted = Object.keys(users).sort(function(a, b) {
 });
 
 var list = sorted.map(function(user) {
-  return user + ': ' + users[user];
+  var out = user + ': ' + users[user];
+  if (users_by_type['Image'] && users_by_type['Image'][user]) {
+    out += ', Images:' + users_by_type['Image'][user];
+  }
+  if (users_by_type['Alias'] && users_by_type['Alias'][user]) {
+    out += ', Aliases:' + users_by_type['Alias'][user];
+  }
+  return out;
 });
 var listTemplate = '<div id="ec_list" style="display: none">' + list.join('<br>') + '</div>';
 $('#ec_count').append(listTemplate);
