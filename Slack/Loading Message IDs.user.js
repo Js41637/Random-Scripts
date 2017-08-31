@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         [Slack] Show Loading Message ID
-// @version      0.1
+// @version      0.2
 // @description  Shows the IDs of all the loading messages
 // @author       Js41637
 // @match        https://*.slack.com/customize/loading
 // ==/UserScript==
 
-$('#customs_table tr:first-of-type').append('<th>MessageID</th>')
-var messages = $('#customs_table tr:not(:first-of-type)');
-messages.each(function(i) {
-	$(this).append('<td class="msgID">' + this.id.slice(4, messages.length) + '</td>')
-})
+$('<th>MessageID</th>').insertBefore('#customs_table thead tr th:last-of-type');
+var messages = $('#customs_table tbody tr');
+messages.each(function() {
+	$('<td class="msgID">' + this.id.slice(4) + '</td>').insertBefore($('td:last-of-type', this));
+});
