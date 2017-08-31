@@ -38,7 +38,8 @@ emojis.forEach(function(emoji) {
   }
 });
 
-var text = '<h5 id="ec_count">You currently have ' + emojis.length + ' custom Emoji added by ' + Object.keys(userTotal).length + ' people</h5>';
+const amount = Object.keys(userTotal).length;
+var text = '<h5 id="ec_count">You currently have ' + emojis.length + ' custom Emoji added by ' + amount + (amount === 1 ? ' person' : ' people') + '</h5>';
 var detailsText = ' <a id="ec_viewDetails">View Details</a>';
 $(text).insertBefore('#custom_emoji');
 $('#ec_count').append(detailsText);
