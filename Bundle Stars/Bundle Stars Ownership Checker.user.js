@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         Bundle Stars Game Ownership Checker
-// @version      1.0
+// @version      1.1
 // @description  Checks games in the bundle if you own them on Steam
 // @author       Js41637
-// @match        https://www.bundlestars.com/*/bundle/*
+// @match        https://www.bundlestars.com/*
 // @connect      api.steampowered.com
 // @grant        GM_xmlhttpRequest
 // @run-at       document-end
@@ -11,6 +11,7 @@
 
 var steamID = undefined;
 var apikey = undefined;
+var activePage;
 var bundles;
 var steamGames = [];
 var bundledGames = [];
@@ -215,12 +216,23 @@ function insertAfter(newNode, referenceNode) {
   referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
 }
 
-setTimeout(function() {
-  getSteamGames()
-    .then(getBundles)
-    .then(getGamesOnPage)
-    .then(checkTradingCards)
-    .then(matchGames)
-    .then(allG)
-    .catch(ohNo);
+setInterval(function() {
+  if (window.location.pathname === activePage || !window.location.pathname.match(/^\/..\/bundle\/.+/)) {
+    return;
+  }
+
+  activePage = window.location.pathname;
+  setTimeout(function() {
+    bundles = undefined;
+    steamGames = [];
+    bundledGames = [];
+
+    getSteamGames()
+      .then(getBundles)
+      .then(getGamesOnPage)
+      .then(checkTradingCards)
+      .then(matchGames)
+      .then(allG)
+      .catch(ohNo);
+  }, 1000);
 }, 1500);
