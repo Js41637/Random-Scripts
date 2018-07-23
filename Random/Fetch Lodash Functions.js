@@ -10,7 +10,8 @@ methods.forEach(method => {
   let command = method.querySelector('h3 code').innerText
   let since = method.querySelector('h4:nth-of-type(1)')
   
-  let description = method.querySelector('p:nth-of-type(2)').innerHTML.split('\n\n\n').slice(0, 1).toString().replace(/(\n)+/g, ' ')
+  let description = method.querySelector('p:nth-of-type(2)')
+  description = description ? description.innerHTML.split('\n\n\n').slice(0, 1).toString().replace(/(\n)+/g, ' ') : {}
   const parser = new DOMParser()
   const { body } = parser.parseFromString(description.replace(/(<code>|<\/code>)/g, '`'), 'text/html')
   description = (body.innerText || '').trim().replace(/\n+/g, ' ')
@@ -29,8 +30,12 @@ methods.forEach(method => {
 
 // Extra one to hide _ or template as they are super long
 for (var l in lodashFunctions) {
-  if (l == '_' || l == 'template' || l == 'lodash') lodashFunctions[l] = {
-    name: l,
-    dontShow: true
+  if (l == '_') {
+    lodashFunctions[l] = {
+      name: l,
+      dontShow: true
+    }
   }
 }
+
+console.log(lodashFunctions)
