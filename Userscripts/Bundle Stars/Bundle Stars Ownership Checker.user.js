@@ -9,9 +9,9 @@
 // @run-at       document-end
 // ==/UserScript==
 
-var steamID = undefined;
-var apikey = undefined;
 var activePage;
+var steamID = '76561198035864385';
+var apikey = '263036EB09F16818719DD5492F7D3AB4';
 var bundles;
 var steamGames = [];
 var bundledGames = [];
