@@ -6,21 +6,21 @@
  */
 
 h1 .octicon.octicon-repo {
-    top: 3px !important;
-    background-image: url(https://raw.githubusercontent.com/Js41637/Website-Scripts/master/Sloth.png);
-    width: 48px;
-    height: 48px;
-    opacity: 0.75;
-    left: -4px;
-    margin-top: -13px !important;
-    line-height: 32px !important;
-    background-size: contain;
+  top: 3px !important;
+  background-image: url(https://raw.githubusercontent.com/Js41637/Website-Scripts/master/Sloth.png);
+  width: 48px;
+  height: 48px;
+  opacity: 0.75;
+  left: -4px;
+  margin-top: -13px !important;
+  line-height: 32px !important;
+  background-size: contain;
 }
 
 h1 .octicon.octicon-repo path {
-    display: none;
+  display: none;
 }
 
 .repohead h1 {
-    padding-left: 53px !important;
+  padding-left: 53px !important;
 }

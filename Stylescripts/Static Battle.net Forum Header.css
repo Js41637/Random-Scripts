@@ -6,10 +6,10 @@
  */
 
 .Topic-header {
-    position: sticky;
-    top: 0px;
-    z-index: 1000;
-    background-color: rgba(60,60,60,0.5);
-    padding: 1.5rem;
-    text-shadow: 2px 2px black;
+  position: sticky;
+  top: 0px;
+  z-index: 1000;
+  background-color: rgba(60, 60, 60, 0.5);
+  padding: 1.5rem;
+  text-shadow: 2px 2px black;
 }

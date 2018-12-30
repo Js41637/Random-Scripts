@@ -4,18 +4,21 @@
  *  - URLs on the domain: github.com
  */
 
-/* Fuck this new font off */
-body, .markdown-body {
-     font-family: 'Arial';
- }
-
 /* Span the file and commit viewer across the whole page */
-.container.new-discussion-timeline {
-    width: 75%;
+
+@media screen and (min-width: 1500px) {
+  .container.new-discussion-timeline {
+    width: 65%;
+  }
+
+  /* Fix for issues/pullrequests layout */
+  #discussion_bucket .discussion-timeline {
+    width: calc(100% - 220px); /* 100% of the container - the sidebar - 20px padding */
+  }
+
 }
 
-/* Fix for issues/pullrequests layout
-100% of the container - the sidebar - 20px padding */
-#discussion_bucket .discussion-timeline {
-    width: calc(100% - 220px);
+/* I don't remember why I did this */
+.commit-indicator {
+  display: inline-block;
 }

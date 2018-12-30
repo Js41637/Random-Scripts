@@ -6,49 +6,55 @@
  */
 
 .item_scrap_actions {
-    display: none;
+  display: none;
 }
 
 .item_market_actions {
-    min-height: 147px;
+  min-height: 147px;
 }
 
 .item_desc_descriptors {
-    max-height: 150px;
-    overflow: auto;
+  max-height: 150px;
+  overflow: auto;
 }
 
 #tabcontent_inventory {
-    position: relative;
+  position: relative;
 }
+
 .view_inventory_logo {
-	padding-top: 26px;
-    margin-bottom: 10px;
+  padding-top: 26px;
+  margin-bottom: 10px;
 }
 
 #tabcontent_inventory .responsive_fixonscroll {
-    position: absolute;
-    top: 42px;
-    left: 300px;
+  position: absolute;
+  top: 42px;
+  left: 300px;
 }
 
-.view_inventory_page { 
-    padding-bottom: 80px;
+.view_inventory_page {
+  padding-bottom: 80px;
 }
 
-.view_inventory_page  .item_desc_content {
-    background-position-y: -25px;
-    padding-top: 196px;
+.view_inventory_page .item_desc_content {
+  background-position-y: -35px;
+  padding-top: 186px;
+}
+
+.item_desc_icon {
+  display: flex;
+  justify-content: center;
 }
 
 .item_desc_icon_center {
-    height: 0;
+  height: 0;
 }
 
 .item_desc_icon_center img {
-    height: 168px;
+  max-height: 158px;
 }
 
 .btn_disabled {
-    opacity: 0.3 !important
+  opacity: 0.3 !important
 }
