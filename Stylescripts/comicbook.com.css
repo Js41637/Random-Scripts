@@ -1,0 +1,27 @@
+/**
+ * Comicbook.com
+ * Applies to:
+ *  - URLs on the domain: comicbook.com
+ */
+
+/* Removes the add banner */
+.adhesion-block {
+  display: none !important;
+}
+
+/* Moves the page up to fix empty space caused by no ad banner */
+@media screen and (min-width: 768px) {
+  body {
+    margin-top: 122px;
+  }
+}
+
+/* Fix bad CSS on the site causing the header to overflow the window */
+.pcm-site-header {
+  width: 100% !important;
+}
+
+/* Fix bad CSS on the site that makes the main content too small */
+body.homepage>.main {
+  max-width: 1530px;
+}
