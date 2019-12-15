@@ -1,10 +1,11 @@
-const url = 'https://blzgdapipro-a.akamaihd.net/game/playerlevelrewards/'
+const url = 'https://d1u1mce87gyfbn.cloudfront.net/game/skins/'
 const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F']
 
 // Goes through 0x0250000000000 + index (9) + small numbers (01, 02, 03... FD, FE, FF)
 // 0x0250000000000|9|00 > 0x0250000000000|9|FF
-const start = '0x0250000000000'
-let index = '9'
+const start = '0x0250000000002'
+
+let index = '5'
 
 let container = document.createElement('div')
 container.id = "border_cont"
@@ -13,18 +14,14 @@ container = document.body.appendChild(container)
 var doShit = (index2) => {
   numbers.forEach((num) => {
     let currentNumber = start + index + index2 + num
-    let borderURL = url + currentNumber + '_Border.png'
-    let rankURL = url + currentNumber + '_Rank.png'
-    makeRequest(borderURL).then(() => {
+    let imgUrl = url + currentNumber + '.jpg'
+    makeRequest(imgUrl).then(() => {
       let cont = document.createElement('div')
       let img = document.createElement('img')
-      let img2 = document.createElement('img')
-      img.src = borderURL
-      img2.src = rankURL
+      img.src = imgUrl
 
       let thing = container.appendChild(cont)
       thing.appendChild(img)
-      thing.appendChild(img2)
       thing.innerHTML = thing.innerHTML + currentNumber
     }).catch(
       console.info("Failed fetching")
@@ -32,7 +29,7 @@ var doShit = (index2) => {
   })
 }
 
-let offset = 0
+offset = 0
 numbers.forEach(number => {
   setTimeout(() => {
     console.info("~~ STARTING", start + index + number)
